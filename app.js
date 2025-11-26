@@ -27,61 +27,61 @@ const galleryItems = [
 
 const livingSlides = [
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
     title: 'Soft neutral living room',
     subtitle: 'Layered textures with warm wood and linen',
     meta: ['Open-plan layout', 'Family-friendly fabrics', 'Hidden storage']
   },
   {
-    image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=900&q=80',
     title: 'Sunlit city lounge',
     subtitle: 'Floor-to-ceiling windows with low seating',
     meta: ['City views', 'Low-profile sofa', 'Accent lighting']
   },
   {
-    image: 'https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=900&q=80',
     title: 'Indoor-outdoor living',
     subtitle: 'Lounge that flows into a garden deck',
     meta: ['Sliding doors', 'Outdoor fabrics', 'Green accents']
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=80&sat=-10',
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80&sat=-10',
     title: 'Minimal gallery room',
     subtitle: 'Art-led space with sculptural lighting',
     meta: ['Gallery wall', 'Statement lighting', 'Neutral palette']
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691791990-35cb85b0811e?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1505691791990-35cb85b0811e?auto=format&fit=crop&w=900&q=80',
     title: 'Cozy corner lounge',
     subtitle: 'Compact nook with built-in seating',
     meta: ['Corner seating', 'Reading lights', 'Storage bench']
   },
   {
-    image: 'https://images.unsplash.com/photo-1502673530728-f79b4cab31b1?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1502673530728-f79b4cab31b1?auto=format&fit=crop&w=900&q=80',
     title: 'Statement sofa living',
     subtitle: 'Bold centerpiece sofa with soft accents',
     meta: ['Accent color', 'Textured rug', 'Layered cushions']
   },
   {
-    image: 'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=900&q=80',
     title: 'Work-from-home lounge',
     subtitle: 'Integrated desk within living zone',
     meta: ['Hybrid space', 'Built-in desk', 'Cable management']
   },
   {
-    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80',
     title: 'Warm modern apartment',
     subtitle: 'Soft woods and layered lighting in a compact flat',
     meta: ['Apartment layout', 'Wall-mounted storage', 'Zoned lighting']
   },
   {
-    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80&sat=-15',
+    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=900&q=80&sat=-15',
     title: 'Monochrome lounge',
     subtitle: 'Calm, tonal palette for focused relaxation',
     meta: ['Monochrome palette', 'Curated decor', 'Low contrast']
   },
   {
-    image: 'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?auto=format&fit=crop&w=900&q=80',
     title: 'Earthy retreat living',
     subtitle: 'Stone, timber, and linen for a grounded feel',
     meta: ['Earthy textures', 'Natural light', 'Layered textiles']
@@ -90,52 +90,52 @@ const livingSlides = [
 
 const bedroomSlides = [
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
     title: 'Calm neutral bedroom',
     subtitle: 'Layered linens and warm timber headboard'
   },
   {
-    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=900&q=80',
     title: 'Suite-style master',
     subtitle: 'Soft lighting and integrated storage'
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80',
     title: 'City-view bedroom',
     subtitle: 'Full-height drapery and tonal palette'
   },
   {
-    image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=900&q=80',
     title: 'Minimal platform bed',
     subtitle: 'Low profile bed with sculptural lighting'
   },
   {
-    image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=900&q=80',
     title: 'Work & rest suite',
     subtitle: 'Bedroom with a quiet work corner'
   },
   {
-    image: 'https://images.unsplash.com/photo-1519710881301-25c39c3c0743?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1519710881301-25c39c3c0743?auto=format&fit=crop&w=900&q=80',
     title: 'Soft pastel bedroom',
     subtitle: 'Pastel tones and soft curves'
   },
   {
-    image: 'https://images.unsplash.com/photo-1493663666135-9d5f5b2e1c79?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1493663666135-9d5f5b2e1c79?auto=format&fit=crop&w=900&q=80',
     title: 'Textured retreat',
     subtitle: 'Wall panelling and layered fabrics'
   },
   {
-    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80',
     title: 'Compact guest bedroom',
     subtitle: 'Smart storage in a small footprint'
   },
   {
-    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80&sat=-20',
+    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=900&q=80&sat=-20',
     title: 'Monochrome bedroom',
     subtitle: 'Tonal layers with high comfort'
   },
   {
-    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80&sat=-15',
+    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80&sat=-15',
     title: 'Earthy calm suite',
     subtitle: 'Stone, timber, and linen textures'
   }
@@ -143,7 +143,7 @@ const bedroomSlides = [
 
 const kitchenSlides = [
   {
-    image: 'https://images.unsplash.com/photo-1556909114-14c0b3e411b9?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1556909114-14c0b3e411b9?auto=format&fit=crop&w=900&q=80',
     title: 'Sleek handle-less kitchen',
     subtitle: 'Glossy white with warm timber island',
     meta: ['Ideal for 2-3 member families', 'Straight + island layout', 'Integrated lighting']
@@ -161,13 +161,13 @@ const kitchenSlides = [
     meta: ['U-shaped layout', 'Breakfast counter', 'Hidden appliances']
   },
   {
-    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=900&q=80',
     title: 'Warm wood & stone kitchen',
     subtitle: 'Textured finishes with island seating',
     meta: ['L-shaped layout', 'Quartz countertop', 'Under-cabinet lighting']
   },
   {
-    image: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=900&q=80',
     title: 'Studio-friendly modular kitchen',
     subtitle: 'Compact yet high-storage cabinetry',
     meta: ['Single-wall layout', 'Loft storage', 'Built-in chimney']
@@ -179,7 +179,7 @@ const kitchenSlides = [
     meta: ['Island seating', 'Child-friendly finishes', 'Task + ambient lighting']
   },
   {
-    image: 'https://images.unsplash.com/photo-1617099390840-9d2c6c5daa89?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1617099390840-9d2c6c5daa89?auto=format&fit=crop&w=900&q=80',
     title: 'Compact corner kitchen',
     subtitle: 'Smart storage in every inch',
     meta: ['Corner carousel units', 'Overhead cabinets', 'Dedicated appliance zone']
