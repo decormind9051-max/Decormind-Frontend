@@ -1,0 +1,25 @@
+{
+  "name": "decormind-backend",
+  "version": "1.0.0",
+  "description": "Serverless AWS Lambda backend for the Decormind interior design app",
+  "type": "module",
+  "scripts": {
+    "deploy": "serverless deploy",
+    "remove": "serverless remove",
+    "offline": "serverless offline"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.609.0",
+    "mongodb": "^6.6.2"
+  },
+  "devDependencies": {
+    "serverless": "^3.38.0",
+    "serverless-offline": "^13.4.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
+
+
+

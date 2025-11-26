@@ -1,0 +1,35 @@
+service: decormind-backend
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ${env:AWS_REGION, us-east-1}
+  stage: ${opt:stage, 'dev'}
+  environment:
+    MONGODB_SECRET_ID: ${env:MONGODB_SECRET_ID}
+    MONGODB_SECRET_ARN: ${env:MONGODB_SECRET_ARN}
+    MONGODB_DB_NAME: ${env:MONGODB_DB_NAME}
+    ALLOWED_ORIGIN: ${env:ALLOWED_ORIGIN, '*'}
+    MONGODB_URI: ${env:MONGODB_URI, ''}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - secretsmanager:GetSecretValue
+          Resource: ${env:MONGODB_SECRET_ARN}
+
+functions:
+  contact:
+    handler: src/handlers/contact.handler
+    timeout: 10
+    memorySize: 256
+    events:
+      - httpApi:
+          path: /contact
+          method: post
+
+plugins:
+  - serverless-offline
+
