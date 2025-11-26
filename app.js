@@ -88,6 +88,59 @@ const livingSlides = [
   }
 ];
 
+const bedroomSlides = [
+  {
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=80',
+    title: 'Calm neutral bedroom',
+    subtitle: 'Layered linens and warm timber headboard'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80',
+    title: 'Suite-style master',
+    subtitle: 'Soft lighting and integrated storage'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80',
+    title: 'City-view bedroom',
+    subtitle: 'Full-height drapery and tonal palette'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80',
+    title: 'Minimal platform bed',
+    subtitle: 'Low profile bed with sculptural lighting'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1200&q=80',
+    title: 'Work & rest suite',
+    subtitle: 'Bedroom with a quiet work corner'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1519710881301-25c39c3c0743?auto=format&fit=crop&w=1200&q=80',
+    title: 'Soft pastel bedroom',
+    subtitle: 'Pastel tones and soft curves'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1493663666135-9d5f5b2e1c79?auto=format&fit=crop&w=1200&q=80',
+    title: 'Textured retreat',
+    subtitle: 'Wall panelling and layered fabrics'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80',
+    title: 'Compact guest bedroom',
+    subtitle: 'Smart storage in a small footprint'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80&sat=-20',
+    title: 'Monochrome bedroom',
+    subtitle: 'Tonal layers with high comfort'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80&sat=-15',
+    title: 'Earthy calm suite',
+    subtitle: 'Stone, timber, and linen textures'
+  }
+];
+
 const kitchenSlides = [
   {
     image: 'https://images.unsplash.com/photo-1556909114-14c0b3e411b9?auto=format&fit=crop&w=1200&q=80',
@@ -201,6 +254,10 @@ const livingTrack = document.getElementById('livingCarouselTrack');
 const livingDots = document.getElementById('livingCarouselDots');
 const livingPrev = document.querySelector('.living-nav-prev');
 const livingNext = document.querySelector('.living-nav-next');
+const bedroomTrack = document.getElementById('bedroomCarouselTrack');
+const bedroomDots = document.getElementById('bedroomCarouselDots');
+const bedroomPrev = document.querySelector('.bedroom-nav-prev');
+const bedroomNext = document.querySelector('.bedroom-nav-next');
 
 const renderGallery = () => {
   if (!galleryGrid) return;
@@ -348,6 +405,10 @@ let currentLivingIndex = 0; // page index (0-based)
 let livingAutoTimer;
 const LIVING_VISIBLE = 3;
 
+let currentBedroomIndex = 0; // page index (0-based)
+let bedroomAutoTimer;
+const BEDROOM_VISIBLE = 3;
+
 const renderKitchenCarousel = () => {
   if (!kitchenTrack || !kitchenDots) return;
 
@@ -362,9 +423,6 @@ const renderKitchenCarousel = () => {
             <p class="eyebrow">Modular Kitchen Design</p>
             <h3>${slide.title}</h3>
             <p>${slide.subtitle}</p>
-            <div class="kitchen-meta">
-              ${slide.meta.map(item => `<span>${item}</span>`).join('')}
-            </div>
             <div class="kitchen-actions">
               <button class="cta ghost" type="button">More details</button>
               <button class="cta primary" type="button" data-kitchen-quote>Get quote</button>
@@ -483,9 +541,6 @@ const renderLivingCarousel = () => {
             <p class="eyebrow">Living Room Design</p>
             <h3>${slide.title}</h3>
             <p>${slide.subtitle}</p>
-            <div class="living-meta">
-              ${slide.meta.map(item => `<span>${item}</span>`).join('')}
-            </div>
             <div class="living-actions">
               <button class="cta ghost" type="button">More details</button>
               <button class="cta primary" type="button" data-living-quote>Get quote</button>
@@ -590,6 +645,124 @@ const handleLivingCarousel = () => {
   livingAutoTimer = setInterval(goNext, 6000);
 };
 
+const renderBedroomCarousel = () => {
+  if (!bedroomTrack || !bedroomDots) return;
+
+  bedroomTrack.innerHTML = bedroomSlides
+    .map(
+      slide => `
+        <article class="bedroom-slide">
+          <div class="bedroom-image">
+            <img src="${slide.image}" alt="${slide.title}" loading="lazy" />
+          </div>
+          <div class="bedroom-copy">
+            <p class="eyebrow">Bedroom Design</p>
+            <h3>${slide.title}</h3>
+            <p>${slide.subtitle}</p>
+            <div class="bedroom-actions">
+              <button class="cta ghost" type="button">More details</button>
+              <button class="cta primary" type="button" data-bedroom-quote>Get quote</button>
+            </div>
+          </div>
+        </article>
+      `
+    )
+    .join('');
+
+  const pageCount = Math.max(1, Math.ceil(bedroomSlides.length / BEDROOM_VISIBLE));
+  const dotCount = pageCount;
+
+  bedroomDots.innerHTML = Array.from({ length: dotCount })
+    .map(
+      (_val, index) => `
+        <button class="bedroom-dot ${index === 0 ? 'active' : ''}" type="button" data-bedroom-dot="${index}"></button>
+      `
+    )
+    .join('');
+};
+
+const updateBedroomActiveState = () => {
+  if (!bedroomTrack || !bedroomDots) return;
+
+  const dots = bedroomDots.querySelectorAll('.bedroom-dot');
+  const pageCount = Math.max(1, Math.ceil(bedroomSlides.length / BEDROOM_VISIBLE));
+  const maxIndex = pageCount - 1;
+  const clampedIndex = Math.min(Math.max(currentBedroomIndex, 0), maxIndex);
+  currentBedroomIndex = clampedIndex;
+
+  const slides = bedroomTrack.querySelectorAll('.bedroom-slide');
+  if (!slides.length) return;
+
+  const firstIndex = Math.min(
+    currentBedroomIndex * BEDROOM_VISIBLE,
+    Math.max(0, slides.length - BEDROOM_VISIBLE)
+  );
+  const targetSlide = slides[firstIndex];
+  const offsetLeft = targetSlide.offsetLeft;
+  bedroomTrack.scrollTo({ left: offsetLeft, behavior: 'smooth' });
+
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentBedroomIndex);
+  });
+};
+
+const handleBedroomCarousel = () => {
+  if (!bedroomTrack || !bedroomDots) return;
+
+  renderBedroomCarousel();
+  updateBedroomActiveState();
+  const pageCount = Math.max(1, Math.ceil(bedroomSlides.length / BEDROOM_VISIBLE));
+  const maxIndex = pageCount - 1;
+
+  const goNext = () => {
+    currentBedroomIndex = currentBedroomIndex >= maxIndex ? 0 : currentBedroomIndex + 1;
+    updateBedroomActiveState();
+  };
+
+  const goPrev = () => {
+    currentBedroomIndex = currentBedroomIndex <= 0 ? maxIndex : currentBedroomIndex - 1;
+    updateBedroomActiveState();
+  };
+
+  bedroomPrev?.addEventListener('click', () => {
+    goPrev();
+    if (bedroomAutoTimer) {
+      clearInterval(bedroomAutoTimer);
+      bedroomAutoTimer = setInterval(goNext, 6000);
+    }
+  });
+
+  bedroomNext?.addEventListener('click', () => {
+    goNext();
+    if (bedroomAutoTimer) {
+      clearInterval(bedroomAutoTimer);
+      bedroomAutoTimer = setInterval(goNext, 6000);
+    }
+  });
+
+  bedroomDots.addEventListener('click', event => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const indexAttr = target.getAttribute('data-bedroom-dot');
+    if (indexAttr == null) return;
+    const index = Number(indexAttr);
+    if (Number.isNaN(index)) return;
+    currentBedroomIndex = index;
+    updateBedroomActiveState();
+  });
+
+  bedroomTrack.addEventListener('click', event => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (target.matches('[data-bedroom-quote]')) {
+      const contactSection = document.getElementById('contact');
+      contactSection?.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  bedroomAutoTimer = setInterval(goNext, 6000);
+};
+
 renderGallery();
 setYear();
 handleFormSubmit();
@@ -598,4 +771,5 @@ handleStyleTabs();
 handleFaq();
 handleKitchenCarousel();
 handleLivingCarousel();
+handleBedroomCarousel();
 
