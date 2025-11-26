@@ -1144,8 +1144,9 @@ select:focus {
 
 @media (max-width: 720px) {
   .nav {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     position: relative;
   }
 
@@ -1179,12 +1180,15 @@ select:focus {
   }
 
   .nav-actions {
-    width: 100%;
-    margin-top: 0.75rem;
+    margin-top: 0;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    gap: 0.5rem;
+    align-items: flex-end;
+    gap: 0.25rem;
+  }
+
+  .nav-phone {
+    text-align: right;
   }
 
   .nav.is-open .nav-links {
