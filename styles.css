@@ -81,8 +81,10 @@ img {
 
 .logo img {
   height: 40px;
-  width: auto;
-  object-fit: contain;
+  width: 40px;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.8);
 }
 
 .nav-links {
@@ -97,11 +99,20 @@ img {
 }
 
 .nav-phone {
-  font-size: 0.95rem;
-  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: #0f172a;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: radial-gradient(circle at 0 0, rgba(255,255,255,0.9), transparent 55%),
+              linear-gradient(135deg, #fee2e2, #bfdbfe);
+  box-shadow: 0 4px 12px rgba(148,163,184,0.45);
+  border: 1px solid rgba(148,163,184,0.6);
 }
 
 .nav-phone:hover {
@@ -1209,6 +1220,10 @@ select:focus {
 
   .nav.is-open .nav-toggle span:last-child {
     transform: translateY(-3px) rotate(-45deg);
+  }
+
+  .nav.is-open .nav-toggle span:nth-child(2) {
+    opacity: 0;
   }
 
   .hero {
