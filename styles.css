@@ -1289,13 +1289,28 @@ select:focus {
   .living-carousel,
   .bedroom-carousel {
     grid-template-columns: 1fr;
+    position: relative;
   }
 
   .kitchen-nav,
   .living-nav,
   .bedroom-nav {
-    order: -1;
-    align-self: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+
+  .kitchen-nav-prev,
+  .living-nav-prev,
+  .bedroom-nav-prev {
+    left: 0.5rem;
+  }
+
+  .kitchen-nav-next,
+  .living-nav-next,
+  .bedroom-nav-next {
+    right: 0.5rem;
   }
 
   .gallery-grid,
