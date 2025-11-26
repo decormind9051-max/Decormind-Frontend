@@ -34,6 +34,9 @@ img {
     radial-gradient(circle at bottom right, rgba(59,130,246,0.4), transparent 55%),
     linear-gradient(135deg, #fef08a, #bef264);
   border-bottom: 1px solid rgba(100,116,139,0.6);
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
 .nav {
