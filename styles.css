@@ -28,7 +28,7 @@ img {
 }
 
 .hero {
-  padding: 2.5rem clamp(1.5rem, 5vw, 6rem) 4rem;
+  padding: 5rem clamp(1.5rem, 5vw, 6rem) 4rem;
   background:
     radial-gradient(circle at top left, rgba(244,63,94,0.35), transparent 50%),
     radial-gradient(circle at bottom right, rgba(59,130,246,0.4), transparent 55%),
@@ -42,9 +42,12 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 30;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  padding: 0.75rem clamp(1.5rem, 5vw, 6rem);
   background:
     radial-gradient(circle at top left, rgba(244,63,94,0.35), transparent 50%),
     radial-gradient(circle at bottom right, rgba(59,130,246,0.4), transparent 55%),
@@ -1168,7 +1171,12 @@ select:focus {
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    padding: 0.75rem 1.25rem;
   }
 
   .nav-links {
@@ -1260,7 +1268,7 @@ select:focus {
   }
 
   .hero {
-    padding: 1.75rem 1.25rem 3rem;
+    padding: 4.25rem 1.25rem 3rem;
   }
 
   .hero-grid {
