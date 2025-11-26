@@ -1101,17 +1101,61 @@ select:focus {
   .nav {
     flex-direction: column;
   }
+
   .nav-links {
     flex-wrap: wrap;
     justify-content: center;
   }
-  .hero-stats {
+
+  .hero {
+    padding: 1.75rem 1.25rem 3rem;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .hero-video video,
+  .hero-video img {
+    height: 260px;
+  }
+
+  .section {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .kitchen-carousel,
+  .living-carousel,
+  .bedroom-carousel {
     grid-template-columns: 1fr;
   }
+
+  .kitchen-nav,
+  .living-nav,
+  .bedroom-nav {
+    order: -1;
+    align-self: center;
+  }
+
+  .gallery-grid,
+  .journey-timeline,
+  .testimonials .testimonial-grid,
+  .palettes .palette-grid,
+  .process-list,
+  .faq-list {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-card {
+    padding: 2rem 1.25rem;
+  }
+
   .cta-banner {
     flex-direction: column;
     align-items: flex-start;
   }
+
   .experience-tabs {
     width: 100%;
   }
