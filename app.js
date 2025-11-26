@@ -260,6 +260,7 @@ const bedroomPrev = document.querySelector('.bedroom-nav-prev');
 const bedroomNext = document.querySelector('.bedroom-nav-next');
 const nav = document.querySelector('.nav');
 const navToggle = document.querySelector('.nav-toggle');
+const drawerClose = document.querySelector('.drawer-close');
 
 const renderGallery = () => {
   if (!galleryGrid) return;
@@ -770,6 +771,10 @@ const handleNavToggle = () => {
 
   navToggle.addEventListener('click', () => {
     nav.classList.toggle('is-open');
+  });
+
+  drawerClose?.addEventListener('click', () => {
+    nav.classList.remove('is-open');
   });
 
   nav.addEventListener('click', event => {
