@@ -769,19 +769,25 @@ const handleBedroomCarousel = () => {
 const handleNavToggle = () => {
   if (!nav || !navToggle) return;
 
+  const setNavOpen = isOpen => {
+    nav.classList.toggle('is-open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  };
+
   navToggle.addEventListener('click', () => {
-    nav.classList.toggle('is-open');
+    const isOpen = nav.classList.contains('is-open');
+    setNavOpen(!isOpen);
   });
 
   drawerClose?.addEventListener('click', () => {
-    nav.classList.remove('is-open');
+    setNavOpen(false);
   });
 
   nav.addEventListener('click', event => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
     if (target.tagName === 'A') {
-      nav.classList.remove('is-open');
+      setNavOpen(false);
     }
   });
 };
