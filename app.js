@@ -25,6 +25,69 @@ const galleryItems = [
   }
 ];
 
+const livingSlides = [
+  {
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=80',
+    title: 'Soft neutral living room',
+    subtitle: 'Layered textures with warm wood and linen',
+    meta: ['Open-plan layout', 'Family-friendly fabrics', 'Hidden storage']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200&q=80',
+    title: 'Sunlit city lounge',
+    subtitle: 'Floor-to-ceiling windows with low seating',
+    meta: ['City views', 'Low-profile sofa', 'Accent lighting']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=1200&q=80',
+    title: 'Indoor-outdoor living',
+    subtitle: 'Lounge that flows into a garden deck',
+    meta: ['Sliding doors', 'Outdoor fabrics', 'Green accents']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=80&sat=-10',
+    title: 'Minimal gallery room',
+    subtitle: 'Art-led space with sculptural lighting',
+    meta: ['Gallery wall', 'Statement lighting', 'Neutral palette']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1505691791990-35cb85b0811e?auto=format&fit=crop&w=1200&q=80',
+    title: 'Cozy corner lounge',
+    subtitle: 'Compact nook with built-in seating',
+    meta: ['Corner seating', 'Reading lights', 'Storage bench']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1502673530728-f79b4cab31b1?auto=format&fit=crop&w=1200&q=80',
+    title: 'Statement sofa living',
+    subtitle: 'Bold centerpiece sofa with soft accents',
+    meta: ['Accent color', 'Textured rug', 'Layered cushions']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1200&q=80',
+    title: 'Work-from-home lounge',
+    subtitle: 'Integrated desk within living zone',
+    meta: ['Hybrid space', 'Built-in desk', 'Cable management']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80',
+    title: 'Warm modern apartment',
+    subtitle: 'Soft woods and layered lighting in a compact flat',
+    meta: ['Apartment layout', 'Wall-mounted storage', 'Zoned lighting']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80&sat=-15',
+    title: 'Monochrome lounge',
+    subtitle: 'Calm, tonal palette for focused relaxation',
+    meta: ['Monochrome palette', 'Curated decor', 'Low contrast']
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?auto=format&fit=crop&w=1200&q=80',
+    title: 'Earthy retreat living',
+    subtitle: 'Stone, timber, and linen for a grounded feel',
+    meta: ['Earthy textures', 'Natural light', 'Layered textiles']
+  }
+];
+
 const kitchenSlides = [
   {
     image: 'https://images.unsplash.com/photo-1556909114-14c0b3e411b9?auto=format&fit=crop&w=1200&q=80',
@@ -134,6 +197,10 @@ const kitchenTrack = document.getElementById('kitchenCarouselTrack');
 const kitchenDots = document.getElementById('kitchenCarouselDots');
 const kitchenPrev = document.querySelector('.kitchen-nav-prev');
 const kitchenNext = document.querySelector('.kitchen-nav-next');
+const livingTrack = document.getElementById('livingCarouselTrack');
+const livingDots = document.getElementById('livingCarouselDots');
+const livingPrev = document.querySelector('.living-nav-prev');
+const livingNext = document.querySelector('.living-nav-next');
 
 const renderGallery = () => {
   if (!galleryGrid) return;
@@ -277,6 +344,10 @@ let currentKitchenIndex = 0; // page index (0-based)
 let kitchenAutoTimer;
 const KITCHEN_VISIBLE = 3;
 
+let currentLivingIndex = 0; // page index (0-based)
+let livingAutoTimer;
+const LIVING_VISIBLE = 3;
+
 const renderKitchenCarousel = () => {
   if (!kitchenTrack || !kitchenDots) return;
 
@@ -398,6 +469,127 @@ const handleKitchenCarousel = () => {
   kitchenAutoTimer = setInterval(goNext, 6000);
 };
 
+const renderLivingCarousel = () => {
+  if (!livingTrack || !livingDots) return;
+
+  livingTrack.innerHTML = livingSlides
+    .map(
+      slide => `
+        <article class="living-slide">
+          <div class="living-image">
+            <img src="${slide.image}" alt="${slide.title}" loading="lazy" />
+          </div>
+          <div class="living-copy">
+            <p class="eyebrow">Living Room Design</p>
+            <h3>${slide.title}</h3>
+            <p>${slide.subtitle}</p>
+            <div class="living-meta">
+              ${slide.meta.map(item => `<span>${item}</span>`).join('')}
+            </div>
+            <div class="living-actions">
+              <button class="cta ghost" type="button">More details</button>
+              <button class="cta primary" type="button" data-living-quote>Get quote</button>
+            </div>
+          </div>
+        </article>
+      `
+    )
+    .join('');
+
+  const pageCount = Math.max(1, Math.ceil(livingSlides.length / LIVING_VISIBLE));
+  const dotCount = pageCount;
+
+  livingDots.innerHTML = Array.from({ length: dotCount })
+    .map(
+      (_val, index) => `
+        <button class="living-dot ${index === 0 ? 'active' : ''}" type="button" data-living-dot="${index}"></button>
+      `
+    )
+    .join('');
+};
+
+const updateLivingActiveState = () => {
+  if (!livingTrack || !livingDots) return;
+
+  const dots = livingDots.querySelectorAll('.living-dot');
+  const pageCount = Math.max(1, Math.ceil(livingSlides.length / LIVING_VISIBLE));
+  const maxIndex = pageCount - 1;
+  const clampedIndex = Math.min(Math.max(currentLivingIndex, 0), maxIndex);
+  currentLivingIndex = clampedIndex;
+
+  const slides = livingTrack.querySelectorAll('.living-slide');
+  if (!slides.length) return;
+
+  const firstIndex = Math.min(
+    currentLivingIndex * LIVING_VISIBLE,
+    Math.max(0, slides.length - LIVING_VISIBLE)
+  );
+  const targetSlide = slides[firstIndex];
+  const offsetLeft = targetSlide.offsetLeft;
+  livingTrack.scrollTo({ left: offsetLeft, behavior: 'smooth' });
+
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentLivingIndex);
+  });
+};
+
+const handleLivingCarousel = () => {
+  if (!livingTrack || !livingDots) return;
+
+  renderLivingCarousel();
+  updateLivingActiveState();
+  const pageCount = Math.max(1, Math.ceil(livingSlides.length / LIVING_VISIBLE));
+  const maxIndex = pageCount - 1;
+
+  const goNext = () => {
+    currentLivingIndex = currentLivingIndex >= maxIndex ? 0 : currentLivingIndex + 1;
+    updateLivingActiveState();
+  };
+
+  const goPrev = () => {
+    currentLivingIndex = currentLivingIndex <= 0 ? maxIndex : currentLivingIndex - 1;
+    updateLivingActiveState();
+  };
+
+  livingPrev?.addEventListener('click', () => {
+    goPrev();
+    if (livingAutoTimer) {
+      clearInterval(livingAutoTimer);
+      livingAutoTimer = setInterval(goNext, 6000);
+    }
+  });
+
+  livingNext?.addEventListener('click', () => {
+    goNext();
+    if (livingAutoTimer) {
+      clearInterval(livingAutoTimer);
+      livingAutoTimer = setInterval(goNext, 6000);
+    }
+  });
+
+  livingDots.addEventListener('click', event => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const indexAttr = target.getAttribute('data-living-dot');
+    if (indexAttr == null) return;
+    const index = Number(indexAttr);
+    if (Number.isNaN(index)) return;
+    currentLivingIndex = index;
+    updateLivingActiveState();
+  });
+
+  livingTrack.addEventListener('click', event => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (target.matches('[data-living-quote]')) {
+      const contactSection = document.getElementById('contact');
+      contactSection?.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  livingAutoTimer = setInterval(goNext, 6000);
+};
+
 renderGallery();
 setYear();
 handleFormSubmit();
@@ -405,4 +597,5 @@ enhanceServiceCards();
 handleStyleTabs();
 handleFaq();
 handleKitchenCarousel();
+handleLivingCarousel();
 

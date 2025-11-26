@@ -422,6 +422,129 @@ h2 {
   }
 }
 
+.living-rooms {
+  padding: 2.5rem clamp(1.5rem, 4vw, 4rem);
+}
+
+.living-carousel {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.living-track {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  gap: 1rem;
+  scroll-behavior: smooth;
+}
+
+.living-slide {
+  flex: 0 0 calc((100% - 2rem) / 3);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.9rem;
+  padding: 1.1rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, #eff6ff, #f9fafb);
+}
+
+.living-image {
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.living-image img {
+  height: 220px;
+  object-fit: cover;
+}
+
+.living-copy h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.living-copy p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--muted);
+}
+
+.living-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.living-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.living-nav {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.living-nav:hover {
+  background: var(--accent);
+  color: #f9fafb;
+  box-shadow: 0 10px 20px rgba(3,105,161,0.35);
+  transform: translateY(-1px);
+}
+
+.living-dots {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.living-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.living-dot.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.1);
+}
+
+@media (max-width: 900px) {
+  .living-slide {
+    flex: 0 0 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .living-image img {
+    height: 260px;
+  }
+}
+
 .trust-logos {
   margin-top: 1.25rem;
   display: flex;
