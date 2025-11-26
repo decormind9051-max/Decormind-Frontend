@@ -30,9 +30,9 @@ img {
 .hero {
   padding: 2.5rem clamp(1.5rem, 5vw, 6rem) 4rem;
   background:
-    radial-gradient(circle at top right, rgba(37,99,235,0.38), transparent 55%),
-    radial-gradient(circle at bottom left, rgba(45,212,191,0.24), transparent 55%),
-    linear-gradient(135deg, #bfdbfe, #d4e0f4);
+    radial-gradient(circle at top left, rgba(244,63,94,0.35), transparent 50%),
+    radial-gradient(circle at bottom right, rgba(59,130,246,0.4), transparent 55%),
+    linear-gradient(135deg, #fef08a, #bef264);
   border-bottom: 1px solid rgba(100,116,139,0.6);
 }
 
@@ -215,6 +215,11 @@ h1 {
 
 .section {
   padding: 4rem clamp(1.5rem, 5vw, 6rem);
+  background:
+    radial-gradient(circle at top left, rgba(244,63,94,0.35), transparent 50%),
+    radial-gradient(circle at bottom right, rgba(59,130,246,0.4), transparent 55%),
+    linear-gradient(135deg, #fef08a, #bef264);
+  color: #111827;
 }
 
 .section-header {
