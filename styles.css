@@ -49,7 +49,8 @@ img {
   height: 40px;
   border-radius: 999px;
   border: 1px solid var(--border);
-  background: #ffffff;
+  background: radial-gradient(circle at 30% 0, rgba(255,255,255,0.9), transparent 55%),
+              linear-gradient(135deg, #0f172a, #0369a1);
   display: none;
   align-items: center;
   justify-content: center;
@@ -60,7 +61,7 @@ img {
 .nav-toggle span {
   width: 18px;
   height: 2px;
-  background: var(--text);
+  background: #f9fafb;
   border-radius: 999px;
   display: block;
   transition: transform 0.2s ease, opacity 0.2s ease;
@@ -1090,8 +1091,9 @@ select:focus {
 }
 
 .primary {
-  background: var(--accent);
+  background: linear-gradient(135deg, #f97316, #e11d48);
   color: #f9fafb;
+  box-shadow: 0 10px 25px rgba(248,113,113,0.45);
 }
 
 .ghost {
