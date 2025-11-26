@@ -258,6 +258,8 @@ const bedroomTrack = document.getElementById('bedroomCarouselTrack');
 const bedroomDots = document.getElementById('bedroomCarouselDots');
 const bedroomPrev = document.querySelector('.bedroom-nav-prev');
 const bedroomNext = document.querySelector('.bedroom-nav-next');
+const nav = document.querySelector('.nav');
+const navToggle = document.querySelector('.nav-toggle');
 
 const renderGallery = () => {
   if (!galleryGrid) return;
@@ -763,6 +765,22 @@ const handleBedroomCarousel = () => {
   bedroomAutoTimer = setInterval(goNext, 6000);
 };
 
+const handleNavToggle = () => {
+  if (!nav || !navToggle) return;
+
+  navToggle.addEventListener('click', () => {
+    nav.classList.toggle('is-open');
+  });
+
+  nav.addEventListener('click', event => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (target.tagName === 'A') {
+      nav.classList.remove('is-open');
+    }
+  });
+};
+
 renderGallery();
 setYear();
 handleFormSubmit();
@@ -772,4 +790,5 @@ handleFaq();
 handleKitchenCarousel();
 handleLivingCarousel();
 handleBedroomCarousel();
+handleNavToggle();
 
