@@ -1172,13 +1172,13 @@ select:focus {
     bottom: 0;
     width: min(280px, 84vw);
     padding: 4.5rem 1.5rem 1.75rem;
-    border-left: 1px solid rgba(15,23,42,0.35);
+    border-left: 1px solid rgba(148,163,184,0.7);
     background:
       radial-gradient(circle at top left, rgba(244,63,94,0.35), transparent 55%),
       radial-gradient(circle at bottom right, rgba(59,130,246,0.4), transparent 55%),
-      linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.92));
-    backdrop-filter: blur(18px);
-    box-shadow: -18px 0 40px rgba(15,23,42,0.65);
+      linear-gradient(135deg, #fef08a, #bef264);
+    backdrop-filter: blur(16px);
+    box-shadow: -18px 0 40px rgba(148,163,184,0.55);
     transform: translateX(100%);
     opacity: 0;
     pointer-events: none;
@@ -1207,6 +1207,11 @@ select:focus {
 
   .nav-phone {
     text-align: right;
+    font-size: 0.85rem;
+  }
+
+  .nav-cta {
+    padding: 0.55rem 1.25rem;
     font-size: 0.85rem;
   }
 
