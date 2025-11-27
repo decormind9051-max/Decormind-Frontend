@@ -344,6 +344,7 @@ const wardrobeNext = document.querySelector('.wardrobe-nav-next');
 const nav = document.querySelector('.nav');
 const navToggle = document.querySelector('.nav-toggle');
 const drawerClose = document.querySelector('.drawer-close');
+const heroSliders = document.querySelectorAll('[data-hero-slider]');
 
 const renderGallery = () => {
   if (!galleryGrid) return;
@@ -1096,6 +1097,27 @@ const handleWardrobeCarousel = () => {
   wardrobeAutoTimer = setInterval(goNext, 6000);
 };
 
+const initHeroSliders = () => {
+  if (!heroSliders.length) return;
+
+  heroSliders.forEach(slider => {
+    const slides = slider.querySelectorAll('[data-hero-slide]');
+    if (slides.length <= 1) return;
+
+    let currentIndex = 0;
+    slides.forEach((slide, index) => {
+      slide.classList.toggle('is-active', index === 0);
+    });
+
+    setInterval(() => {
+      const nextIndex = (currentIndex + 1) % slides.length;
+      slides[currentIndex].classList.remove('is-active');
+      slides[nextIndex].classList.add('is-active');
+      currentIndex = nextIndex;
+    }, 5500);
+  });
+};
+
 const handleNavToggle = () => {
   if (!nav || !navToggle) return;
 
@@ -1135,4 +1157,5 @@ handleWardrobeCarousel();
 handleNavToggle();
 initHeroTypedWord();
 handleHappyCarousel();
+initHeroSliders();
 
