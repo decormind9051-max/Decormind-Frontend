@@ -1706,6 +1706,7 @@ select:focus {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  justify-content: center;
 }
 
 .cta-video-icon {
