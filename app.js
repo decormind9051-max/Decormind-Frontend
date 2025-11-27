@@ -25,6 +25,27 @@ const galleryItems = [
   }
 ];
 
+const happyHomesSlides = [
+  {
+    image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=900&q=80',
+    quote: 'Our 3BHK now feels like a boutique hotel, but it still works for everyday family chaos. Storage, light, and colors are all spot on.',
+    name: 'Singh Family',
+    location: 'New Town, Kolkata'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1502672023488-70e25813eb80?auto=format&fit=crop&w=900&q=80',
+    quote: 'From kitchen layouts to kids’ rooms, everything was planned end-to-end. We only had to approve designs and enjoy the reveal day.',
+    name: 'Ananya & Rahul',
+    location: 'High-rise apartment'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
+    quote: 'They converted an old flat into a warm, modern home. Guests always ask who did our interiors.',
+    name: 'Roy Residence',
+    location: 'Family home makeover'
+  }
+];
+
 const wardrobeSlides = [
   {
     image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=900&q=80',
@@ -292,6 +313,10 @@ const contactForm = document.getElementById('contactForm');
 const toast = document.getElementById('toast');
 const yearEl = document.getElementById('year');
 const heroTypedEl = document.getElementById('heroTypedWord');
+const happyTrack = document.getElementById('happyHomesTrack');
+const happyDots = document.getElementById('happyHomesDots');
+const happyPrev = document.querySelector('.happy-nav-prev');
+const happyNext = document.querySelector('.happy-nav-next');
 const styleButtons = document.querySelectorAll('[data-style]');
 const styleEyebrow = document.getElementById('styleEyebrow');
 const styleTitle = document.getElementById('styleTitle');
@@ -496,6 +521,91 @@ const initHeroTypedWord = () => {
   };
 
   tick();
+};
+
+let currentHappyIndex = 0;
+
+const renderHappyCarousel = () => {
+  if (!happyTrack || !happyDots) return;
+
+  happyTrack.innerHTML = happyHomesSlides
+    .map(
+      slide => `
+        <article class="happy-card">
+          <div class="happy-image">
+            <img src="${slide.image}" alt="${slide.name} home" loading="lazy" />
+          </div>
+          <div class="happy-copy">
+            <p>“${slide.quote}”</p>
+            <h4>${slide.name}</h4>
+            <span>${slide.location}</span>
+          </div>
+        </article>
+      `
+    )
+    .join('');
+
+  const pageCount = Math.max(1, happyHomesSlides.length);
+
+  happyDots.innerHTML = Array.from({ length: pageCount })
+    .map(
+      (_val, index) => `
+        <button class="happy-dot ${index === 0 ? 'active' : ''}" type="button" data-happy-dot="${index}"></button>
+      `
+    )
+    .join('');
+};
+
+const updateHappyActiveState = () => {
+  if (!happyTrack || !happyDots) return;
+
+  const dots = happyDots.querySelectorAll('.happy-dot');
+  const slides = happyTrack.querySelectorAll('.happy-card');
+  if (!slides.length) return;
+
+  const maxIndex = slides.length - 1;
+  currentHappyIndex = Math.min(Math.max(currentHappyIndex, 0), maxIndex);
+
+  const targetSlide = slides[currentHappyIndex];
+  const offsetLeft = targetSlide.offsetLeft;
+  happyTrack.scrollTo({ left: offsetLeft, behavior: 'smooth' });
+
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentHappyIndex);
+  });
+};
+
+const handleHappyCarousel = () => {
+  if (!happyTrack || !happyDots) return;
+
+  renderHappyCarousel();
+  updateHappyActiveState();
+
+  const maxIndex = Math.max(0, happyHomesSlides.length - 1);
+
+  const goNext = () => {
+    currentHappyIndex = currentHappyIndex >= maxIndex ? 0 : currentHappyIndex + 1;
+    updateHappyActiveState();
+  };
+
+  const goPrev = () => {
+    currentHappyIndex = currentHappyIndex <= 0 ? maxIndex : currentHappyIndex - 1;
+    updateHappyActiveState();
+  };
+
+  happyPrev?.addEventListener('click', goPrev);
+  happyNext?.addEventListener('click', goNext);
+
+  happyDots.addEventListener('click', event => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const indexAttr = target.getAttribute('data-happy-dot');
+    if (indexAttr == null) return;
+    const index = Number(indexAttr);
+    if (Number.isNaN(index)) return;
+    currentHappyIndex = index;
+    updateHappyActiveState();
+  });
 };
 
 let currentKitchenIndex = 0; // page index (0-based)
@@ -1024,4 +1134,5 @@ handleBedroomCarousel();
 handleWardrobeCarousel();
 handleNavToggle();
 initHeroTypedWord();
+handleHappyCarousel();
 
