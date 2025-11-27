@@ -1701,6 +1701,39 @@ select:focus {
   box-shadow: 0 10px 25px rgba(215,148,60,0.5);
 }
 
+.cta.primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cta-video-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.12);
+  font-size: 0.9rem;
+  animation: video-call-blink 1.4s ease-out infinite;
+}
+
+@keyframes video-call-blink {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .ghost {
   background: transparent;
   border: 1px solid var(--border);
