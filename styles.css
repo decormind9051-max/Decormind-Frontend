@@ -1,10 +1,10 @@
 :root {
-  --bg: #d4e0f4;              /* deeper cool background */
-  --card: #f9fafb;            /* soft off-white card surface */
-  --accent: #0369a1;          /* richer blue accent */
-  --text: #0f172a;            /* dark slate text */
-  --muted: #475569;           /* slightly deeper muted text */
-  --border: rgba(100,116,139,0.5); /* stronger border */
+  --bg: #f5e6d8;              /* soft light peach page background */
+  --card: #ffffff;            /* clean white card surface */
+  --accent: #d7943c;          /* mustard-gold accent closer to reference CTA */
+  --text: #292524;            /* warm deep gray text */
+  --muted: #78716c;           /* warm muted body text */
+  --border: rgba(214,211,209,0.9); /* soft warm border */
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -30,10 +30,10 @@ img {
 .hero {
   padding: 5rem clamp(1.5rem, 5vw, 6rem) 4rem;
   background:
-    radial-gradient(circle at top left, rgba(244,63,94,0.35), transparent 50%),
-    radial-gradient(circle at bottom right, rgba(59,130,246,0.4), transparent 55%),
-    linear-gradient(135deg, #fef08a, #bef264);
-  border-bottom: 1px solid rgba(100,116,139,0.6);
+    radial-gradient(circle at top left, rgba(255,255,255,0.95), transparent 60%),
+    radial-gradient(circle at bottom right, rgba(248,214,179,0.55), transparent 62%),
+    linear-gradient(135deg, #faf5ef, #f6e6d7);
+  border-bottom: 1px solid rgba(214,211,209,0.9);
   position: relative;
 }
 
@@ -49,9 +49,7 @@ img {
   z-index: 40;
   padding: 0.75rem clamp(1.5rem, 5vw, 6rem);
   background:
-    radial-gradient(circle at top left, rgba(244,63,94,0.35), transparent 50%),
-    radial-gradient(circle at bottom right, rgba(59,130,246,0.4), transparent 55%),
-    linear-gradient(135deg, #fef08a, #bef264);
+    linear-gradient(90deg, rgba(246,231,218,0.98), rgba(249,242,234,0.98));
 }
 
 .nav-toggle {
@@ -289,10 +287,8 @@ h1 {
 .section {
   padding: 4rem clamp(1.5rem, 5vw, 6rem);
   background:
-    radial-gradient(circle at top left, rgba(244,63,94,0.35), transparent 50%),
-    radial-gradient(circle at bottom right, rgba(59,130,246,0.4), transparent 55%),
-    linear-gradient(135deg, #fef08a, #bef264);
-  color: #111827;
+    linear-gradient(135deg, #fbf7f1, #f5e6d8);
+  color: var(--text);
 }
 
 .section-header {
@@ -1179,9 +1175,7 @@ h2 {
   padding: clamp(1.5rem, 4vw, 3rem);
   flex-wrap: wrap;
   background:
-    radial-gradient(circle at top left, rgba(37,99,235,0.42), transparent 45%),
-    radial-gradient(circle at bottom right, rgba(56,189,248,0.45), transparent 55%),
-    linear-gradient(135deg, #bfdbfe, #d4e0f4);
+    linear-gradient(135deg, #f9f3ea, #f4ddc4);
 }
 
 .contact-card {
@@ -1232,9 +1226,9 @@ select:focus {
 }
 
 .primary {
-  background: linear-gradient(135deg, #f97316, #e11d48);
-  color: #f9fafb;
-  box-shadow: 0 10px 25px rgba(248,113,113,0.45);
+  background: linear-gradient(135deg, #f5b25a, #d7943c);
+  color: #fefcf8;
+  box-shadow: 0 10px 25px rgba(215,148,60,0.5);
 }
 
 .ghost {
