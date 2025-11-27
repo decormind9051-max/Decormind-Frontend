@@ -25,6 +25,59 @@ const galleryItems = [
   }
 ];
 
+const wardrobeSlides = [
+  {
+    image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=900&q=80',
+    title: 'Built-in sliding wardrobe',
+    subtitle: 'Full-height shutters with soft neutral finishes'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80',
+    title: 'Compact bedroom wardrobe',
+    subtitle: 'Smart vertical storage for tight footprints'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=900&q=80',
+    title: 'Open niche wardrobe',
+    subtitle: 'Integrated shelving with soft lighting'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=900&q=80',
+    title: 'Suite walk-in wardrobe',
+    subtitle: 'Island dresser and perimeter hanging zones'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1493663666135-9d5f5b2e1c79?auto=format&fit=crop&w=900&q=80',
+    title: 'Textured panel wardrobe',
+    subtitle: 'Grooved shutters with concealed handles'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=900&q=80',
+    title: 'Work-from-home wardrobe wall',
+    subtitle: 'Wardrobe plus concealed study nook'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80&sat=-10',
+    title: 'Glass-front display wardrobe',
+    subtitle: 'Curated pieces behind softly lit glass'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
+    title: 'Minimal white wardrobe',
+    subtitle: 'Handle-less shutters for a calm backdrop'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80',
+    title: 'Loft wardrobe system',
+    subtitle: 'Open and closed storage for studio living'
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=900&q=80',
+    title: 'Apartment entry wardrobe',
+    subtitle: 'Slim wardrobe with integrated bench'
+  }
+];
+
 const livingSlides = [
   {
     image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
@@ -258,6 +311,10 @@ const bedroomTrack = document.getElementById('bedroomCarouselTrack');
 const bedroomDots = document.getElementById('bedroomCarouselDots');
 const bedroomPrev = document.querySelector('.bedroom-nav-prev');
 const bedroomNext = document.querySelector('.bedroom-nav-next');
+const wardrobeTrack = document.getElementById('wardrobeCarouselTrack');
+const wardrobeDots = document.getElementById('wardrobeCarouselDots');
+const wardrobePrev = document.querySelector('.wardrobe-nav-prev');
+const wardrobeNext = document.querySelector('.wardrobe-nav-next');
 const nav = document.querySelector('.nav');
 const navToggle = document.querySelector('.nav-toggle');
 const drawerClose = document.querySelector('.drawer-close');
@@ -411,6 +468,10 @@ const LIVING_VISIBLE = 3;
 let currentBedroomIndex = 0; // page index (0-based)
 let bedroomAutoTimer;
 const BEDROOM_VISIBLE = 3;
+
+let currentWardrobeIndex = 0; // page index (0-based)
+let wardrobeAutoTimer;
+const WARDROBE_VISIBLE = 3;
 
 const renderKitchenCarousel = () => {
   if (!kitchenTrack || !kitchenDots) return;
@@ -766,6 +827,124 @@ const handleBedroomCarousel = () => {
   bedroomAutoTimer = setInterval(goNext, 6000);
 };
 
+const renderWardrobeCarousel = () => {
+  if (!wardrobeTrack || !wardrobeDots) return;
+
+  wardrobeTrack.innerHTML = wardrobeSlides
+    .map(
+      slide => `
+        <article class="wardrobe-slide">
+          <div class="wardrobe-image">
+            <img src="${slide.image}" alt="${slide.title}" loading="lazy" />
+          </div>
+          <div class="wardrobe-copy">
+            <p class="eyebrow">Wardrobe Design</p>
+            <h3>${slide.title}</h3>
+            <p>${slide.subtitle}</p>
+            <div class="wardrobe-actions">
+              <button class="cta ghost" type="button">More details</button>
+              <button class="cta primary" type="button" data-wardrobe-quote>Get quote</button>
+            </div>
+          </div>
+        </article>
+      `
+    )
+    .join('');
+
+  const pageCount = Math.max(1, Math.ceil(wardrobeSlides.length / WARDROBE_VISIBLE));
+  const dotCount = pageCount;
+
+  wardrobeDots.innerHTML = Array.from({ length: dotCount })
+    .map(
+      (_val, index) => `
+        <button class="wardrobe-dot ${index === 0 ? 'active' : ''}" type="button" data-wardrobe-dot="${index}"></button>
+      `
+    )
+    .join('');
+};
+
+const updateWardrobeActiveState = () => {
+  if (!wardrobeTrack || !wardrobeDots) return;
+
+  const dots = wardrobeDots.querySelectorAll('.wardrobe-dot');
+  const pageCount = Math.max(1, Math.ceil(wardrobeSlides.length / WARDROBE_VISIBLE));
+  const maxIndex = pageCount - 1;
+  const clampedIndex = Math.min(Math.max(currentWardrobeIndex, 0), maxIndex);
+  currentWardrobeIndex = clampedIndex;
+
+  const slides = wardrobeTrack.querySelectorAll('.wardrobe-slide');
+  if (!slides.length) return;
+
+  const firstIndex = Math.min(
+    currentWardrobeIndex * WARDROBE_VISIBLE,
+    Math.max(0, slides.length - WARDROBE_VISIBLE)
+  );
+  const targetSlide = slides[firstIndex];
+  const offsetLeft = targetSlide.offsetLeft;
+  wardrobeTrack.scrollTo({ left: offsetLeft, behavior: 'smooth' });
+
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentWardrobeIndex);
+  });
+};
+
+const handleWardrobeCarousel = () => {
+  if (!wardrobeTrack || !wardrobeDots) return;
+
+  renderWardrobeCarousel();
+  updateWardrobeActiveState();
+  const pageCount = Math.max(1, Math.ceil(wardrobeSlides.length / WARDROBE_VISIBLE));
+  const maxIndex = pageCount - 1;
+
+  const goNext = () => {
+    currentWardrobeIndex = currentWardrobeIndex >= maxIndex ? 0 : currentWardrobeIndex + 1;
+    updateWardrobeActiveState();
+  };
+
+  const goPrev = () => {
+    currentWardrobeIndex = currentWardrobeIndex <= 0 ? maxIndex : currentWardrobeIndex - 1;
+    updateWardrobeActiveState();
+  };
+
+  wardrobePrev?.addEventListener('click', () => {
+    goPrev();
+    if (wardrobeAutoTimer) {
+      clearInterval(wardrobeAutoTimer);
+      wardrobeAutoTimer = setInterval(goNext, 6000);
+    }
+  });
+
+  wardrobeNext?.addEventListener('click', () => {
+    goNext();
+    if (wardrobeAutoTimer) {
+      clearInterval(wardrobeAutoTimer);
+      wardrobeAutoTimer = setInterval(goNext, 6000);
+    }
+  });
+
+  wardrobeDots.addEventListener('click', event => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const indexAttr = target.getAttribute('data-wardrobe-dot');
+    if (indexAttr == null) return;
+    const index = Number(indexAttr);
+    if (Number.isNaN(index)) return;
+    currentWardrobeIndex = index;
+    updateWardrobeActiveState();
+  });
+
+  wardrobeTrack.addEventListener('click', event => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (target.matches('[data-wardrobe-quote]')) {
+      const contactSection = document.getElementById('contact');
+      contactSection?.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  wardrobeAutoTimer = setInterval(goNext, 6000);
+};
+
 const handleNavToggle = () => {
   if (!nav || !navToggle) return;
 
@@ -801,5 +980,6 @@ handleFaq();
 handleKitchenCarousel();
 handleLivingCarousel();
 handleBedroomCarousel();
+handleWardrobeCarousel();
 handleNavToggle();
 

@@ -737,6 +737,120 @@ h2 {
   }
 }
 
+.wardrobes {
+  padding: 2.5rem clamp(1.5rem, 4vw, 4rem);
+}
+
+.wardrobe-carousel {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.wardrobe-track {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  gap: 1rem;
+  scroll-behavior: smooth;
+}
+
+.wardrobe-slide {
+  flex: 0 0 calc((100% - 2rem) / 3);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.9rem;
+  padding: 0.9rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, #eef2ff, #f9fafb);
+}
+
+.wardrobe-image {
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.wardrobe-image img {
+  height: 190px;
+  object-fit: cover;
+}
+
+.wardrobe-copy h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.wardrobe-copy p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--muted);
+}
+
+.wardrobe-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.wardrobe-nav {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wardrobe-nav:hover {
+  background: var(--accent);
+  color: #f9fafb;
+  box-shadow: 0 10px 20px rgba(3,105,161,0.35);
+  transform: translateY(-1px);
+}
+
+.wardrobe-dots {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.wardrobe-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.wardrobe-dot.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.1);
+}
+
+@media (max-width: 900px) {
+  .wardrobe-slide {
+    flex: 0 0 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wardrobe-image img {
+    height: 220px;
+  }
+}
+
 .trust-logos {
   margin-top: 1.25rem;
   display: flex;
@@ -1293,14 +1407,16 @@ select:focus {
 
   .kitchen-carousel,
   .living-carousel,
-  .bedroom-carousel {
+  .bedroom-carousel,
+  .wardrobe-carousel {
     grid-template-columns: 1fr;
     position: relative;
   }
 
   .kitchen-nav,
   .living-nav,
-  .bedroom-nav {
+  .bedroom-nav,
+  .wardrobe-nav {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -1309,13 +1425,15 @@ select:focus {
 
   .kitchen-nav-prev,
   .living-nav-prev,
-  .bedroom-nav-prev {
+  .bedroom-nav-prev,
+  .wardrobe-nav-prev {
     left: 0.5rem;
   }
 
   .kitchen-nav-next,
   .living-nav-next,
-  .bedroom-nav-next {
+  .bedroom-nav-next,
+  .wardrobe-nav-next {
     right: 0.5rem;
   }
 
