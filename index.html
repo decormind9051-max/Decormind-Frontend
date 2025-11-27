@@ -370,6 +370,32 @@
       <p>&copy; <span id="year"></span> Decormind. All rights reserved.</p>
     </div>
   </footer>
+  <div class="lead-popup" id="leadPopup" aria-hidden="true">
+    <div class="lead-popup-backdrop"></div>
+    <div class="lead-popup-card" role="dialog" aria-modal="true" aria-labelledby="leadPopupTitle">
+      <button class="lead-popup-close" type="button" id="leadPopupClose" aria-label="Close lead form">&times;</button>
+      <div class="lead-popup-header">
+        <h2 id="leadPopupTitle">Designs for every budget</h2>
+        <span class="lead-popup-step">1 / 2</span>
+      </div>
+      <form id="leadPopupForm" class="lead-popup-form">
+        <div class="form-group">
+          <label for="leadName">Name</label>
+          <input id="leadName" name="leadName" type="text" required />
+        </div>
+        <div class="form-group">
+          <label for="leadPhone">Mobile number</label>
+          <input id="leadPhone" name="leadPhone" type="tel" required />
+        </div>
+        <label class="lead-popup-checkbox">
+          <input type="checkbox" id="leadWhatsapp" name="leadWhatsapp" />
+          <span>Send me updates on WhatsApp</span>
+        </label>
+        <button type="submit" class="cta primary lead-popup-submit">Next</button>
+        <p class="lead-popup-disclaimer">By submitting this form, you agree to the privacy policy &amp; terms and conditions.</p>
+      </form>
+    </div>
+  </div>
 
   <div class="toast hidden" id="toast">
     <p>Inquiry sent. We'll be in touch shortly.</p>

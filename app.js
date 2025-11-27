@@ -345,6 +345,9 @@ const nav = document.querySelector('.nav');
 const navToggle = document.querySelector('.nav-toggle');
 const drawerClose = document.querySelector('.drawer-close');
 const heroSliders = document.querySelectorAll('[data-hero-slider]');
+const leadPopup = document.getElementById('leadPopup');
+const leadPopupClose = document.getElementById('leadPopupClose');
+const leadPopupForm = document.getElementById('leadPopupForm');
 
 const renderGallery = () => {
   if (!galleryGrid) return;
@@ -423,6 +426,50 @@ const handleFormSubmit = () => {
     } finally {
       contactForm.classList.remove('is-loading');
     }
+  });
+};
+
+const initLeadPopup = () => {
+  if (!leadPopup || !leadPopupForm) return;
+
+  const STORAGE_KEY = 'decormind_lead_popup_seen';
+  const hasSeen = window.localStorage.getItem(STORAGE_KEY);
+  if (!hasSeen) {
+    setTimeout(() => {
+      leadPopup.classList.add('is-open');
+      leadPopup.setAttribute('aria-hidden', 'false');
+    }, 9000);
+  }
+
+  const closePopup = () => {
+    leadPopup.classList.remove('is-open');
+    leadPopup.setAttribute('aria-hidden', 'true');
+    window.localStorage.setItem(STORAGE_KEY, 'true');
+  };
+
+  leadPopupClose?.addEventListener('click', () => {
+    closePopup();
+  });
+
+  leadPopup.addEventListener('click', event => {
+    if (event.target === leadPopup) {
+      closePopup();
+    }
+  });
+
+  leadPopupForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const formData = new FormData(leadPopupForm);
+    const name = String(formData.get('leadName') || '').trim();
+    const phone = String(formData.get('leadPhone') || '').trim();
+
+    if (!name || !phone) {
+      showToast('Please add your name and mobile number.', true);
+      return;
+    }
+
+    closePopup();
+    showToast('Thanks! Our designer will connect with you shortly.');
   });
 };
 
@@ -1158,4 +1205,5 @@ handleNavToggle();
 initHeroTypedWord();
 handleHappyCarousel();
 initHeroSliders();
+initLeadPopup();
 
