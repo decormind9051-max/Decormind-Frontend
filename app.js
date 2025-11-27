@@ -640,7 +640,7 @@ const renderKitchenCarousel = () => {
             <h3>${slide.title}</h3>
             <p>${slide.subtitle}</p>
             <div class="kitchen-actions">
-              <button class="cta ghost" type="button">More details</button>
+              <a class="cta ghost" href="tel:+919831435314">Talk to designer</a>
               <button class="cta primary" type="button" data-kitchen-quote>Get quote</button>
             </div>
           </div>
@@ -758,7 +758,7 @@ const renderLivingCarousel = () => {
             <h3>${slide.title}</h3>
             <p>${slide.subtitle}</p>
             <div class="living-actions">
-              <button class="cta ghost" type="button">More details</button>
+              <a class="cta ghost" href="tel:+919831435314">Talk to designer</a>
               <button class="cta primary" type="button" data-living-quote>Get quote</button>
             </div>
           </div>
@@ -876,7 +876,7 @@ const renderBedroomCarousel = () => {
             <h3>${slide.title}</h3>
             <p>${slide.subtitle}</p>
             <div class="bedroom-actions">
-              <button class="cta ghost" type="button">More details</button>
+              <a class="cta ghost" href="tel:+919831435314">Talk to designer</a>
               <button class="cta primary" type="button" data-bedroom-quote>Get quote</button>
             </div>
           </div>
@@ -994,7 +994,7 @@ const renderWardrobeCarousel = () => {
             <h3>${slide.title}</h3>
             <p>${slide.subtitle}</p>
             <div class="wardrobe-actions">
-              <button class="cta ghost" type="button">More details</button>
+              <a class="cta ghost" href="tel:+919831435314">Talk to designer</a>
               <button class="cta primary" type="button" data-wardrobe-quote>Get quote</button>
             </div>
           </div>
