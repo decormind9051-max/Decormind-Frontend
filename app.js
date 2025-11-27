@@ -291,6 +291,7 @@ const galleryGrid = document.getElementById('galleryGrid');
 const contactForm = document.getElementById('contactForm');
 const toast = document.getElementById('toast');
 const yearEl = document.getElementById('year');
+const heroTypedEl = document.getElementById('heroTypedWord');
 const styleButtons = document.querySelectorAll('[data-style]');
 const styleEyebrow = document.getElementById('styleEyebrow');
 const styleTitle = document.getElementById('styleTitle');
@@ -455,6 +456,46 @@ const handleFaq = () => {
     });
   });
   faqToggles[0]?.closest('.faq-item')?.classList.add('open');
+};
+
+const initHeroTypedWord = () => {
+  if (!heroTypedEl) return;
+
+  const words = ['life', 'comfort', 'style', 'routine'];
+  let wordIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+
+  const typeSpeed = 50;
+  const pauseBetweenWords = 1200;
+
+  const tick = () => {
+    const current = words[wordIndex];
+
+    if (!isDeleting) {
+      charIndex += 1;
+      heroTypedEl.textContent = current.slice(0, charIndex);
+
+      if (charIndex === current.length) {
+        isDeleting = true;
+        setTimeout(tick, pauseBetweenWords);
+        return;
+      }
+    } else {
+      charIndex -= 1;
+      heroTypedEl.textContent = current.slice(0, Math.max(charIndex, 0));
+
+      if (charIndex <= 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+      }
+    }
+
+    const delay = isDeleting ? 40 : typeSpeed;
+    setTimeout(tick, delay);
+  };
+
+  tick();
 };
 
 let currentKitchenIndex = 0; // page index (0-based)
@@ -982,4 +1023,5 @@ handleLivingCarousel();
 handleBedroomCarousel();
 handleWardrobeCarousel();
 handleNavToggle();
+initHeroTypedWord();
 

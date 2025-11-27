@@ -107,9 +107,38 @@ img {
 }
 
 .nav-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.9rem;
   line-height: 1.1;
   white-space: nowrap;
+}
+
+.nav-cta::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #fefce8;
+  box-shadow: 0 0 0 0 rgba(215,148,60,0.85);
+  animation: nav-cta-pulse 1.4s ease-out infinite;
+}
+
+@keyframes nav-cta-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(215,148,60,0.85);
+  }
+  70% {
+    transform: scale(1.8);
+    box-shadow: 0 0 0 6px rgba(215,148,60,0);
+  }
+  100% {
+    transform: scale(1.8);
+    box-shadow: 0 0 0 0 rgba(215,148,60,0);
+  }
 }
 
 .nav-phone {
@@ -161,6 +190,11 @@ h1 {
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   margin-bottom: 1.5rem;
   line-height: 1.1;
+}
+
+.hero-typed-word {
+  color: #f5b25a;
+  white-space: nowrap;
 }
 
 .subhead {
@@ -1405,12 +1439,6 @@ select:focus {
     overflow-y: auto;
   }
 
-   .nav-cta {
-    width: 100%;
-    justify-content: center;
-    margin-top: 0.75rem;
-  }
-
   .nav-toggle {
     display: flex;
     order: 3;
@@ -1421,21 +1449,21 @@ select:focus {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.25rem;
     order: 2;
     flex-shrink: 1;
   }
 
   .nav-phone {
     text-align: right;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     line-height: 1.1;
-    padding: 0.45rem 0.9rem;
+    padding: 0.35rem 0.8rem;
   }
 
   .nav-cta {
-    padding: 0.45rem 1.1rem;
-    font-size: 0.8rem;
+    padding: 0.38rem 0.95rem;
+    font-size: 0.78rem;
     line-height: 1.1;
   }
 
