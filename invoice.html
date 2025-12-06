@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decormind Invoice</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .quote-container { max-width: 900px; margin: 40px auto; background:#fff; border:1px solid #e5e5e5; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+    .quote-grid { display:grid; grid-template-columns:2fr 1.4fr; gap:16px; }
+    .quote-table { width:100%; border-collapse:collapse; }
+    .quote-table th, .quote-table td { border:1px solid #e5e5e5; padding:6px 8px; font-size:13px; }
+    .quote-table th { background:#f4d48a; }
+    .band { background:#f4d48a; padding:6px 10px; font-weight:600; font-size:13px; margin-top:16px; }
+    .cust-band { background:#d9d9d9; padding:6px 10px; font-weight:600; font-size:13px; margin-top:16px; }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:6px 0; }
+    .field-row label { font-size:13px; display:block; margin-bottom:4px; }
+    .field-row input, .field-row textarea { width:100%; padding:6px 8px; font-size:13px; }
+    .items-table-wrapper { margin-top:8px; overflow-x:auto; }
+    .actions { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+    .actions button { padding:8px 14px; border:0; background:#2563eb; color:#fff; border-radius:4px; cursor:pointer; font-size:14px; }
+    .actions button.secondary { background:#111827; }
+    .status { margin-top:10px; font-size:13px; color:#065f46; }
+    .status.error { color:#b91c1c; }
+    @media (max-width:768px){ .quote-grid { grid-template-columns:1fr; } }
+  </style>
+  <script>
+    const API_BASE = 'https://vzw780l2gg.execute-api.ap-south-1.amazonaws.com';
+    const API = API_BASE.replace(/\/$/, '');
+
+    function addItemRow(prefill = {}) {
+      const tbody = document.getElementById('items-body');
+      const tr = document.createElement('tr');
+      const unit = prefill.unit || '1 unit';
+      tr.innerHTML = `
+        <td><input type="text" name="description" placeholder="Item description" value="${prefill.description || ''}" required></td>
+        <td><input type="text" name="hsnCode" placeholder="HSN Code" value="${prefill.hsnCode || ''}"></td>
+        <td><input type="number" name="quantity" min="1" step="1" value="${prefill.quantity || 1}" oninput="recalcRow(this)" required></td>
+        <td>
+          <select name="unit">
+            <option value="1 unit" ${unit === '1 unit' ? 'selected' : ''}>1 unit</option>
+            <option value="1 sqmm" ${unit === '1 sqmm' ? 'selected' : ''}>1 sqmm</option>
+            <option value="1 sqcm" ${unit === '1 sqcm' ? 'selected' : ''}>1 sqcm</option>
+            <option value="1 sqm" ${unit === '1 sqm' ? 'selected' : ''}>1 sqm</option>
+            <option value="1 running ft" ${unit === '1 running ft' ? 'selected' : ''}>1 running ft</option>
+            <option value="1 running m" ${unit === '1 running m' ? 'selected' : ''}>1 running m</option>
+            <option value="1 piece" ${unit === '1 piece' ? 'selected' : ''}>1 piece</option>
+          </select>
+        </td>
+        <td><input type="number" name="unitPrice" min="0" step="0.01" value="${prefill.unitPrice || 0}" oninput="recalcRow(this)" required></td>
+        <td><input type="text" name="amount" readonly></td>
+      `;
+      tbody.appendChild(tr);
+      recalcRow(tr.querySelector('input[name="quantity"]'));
+    }
+
+    function recalcRow(el){
+      const tr = el.closest('tr');
+      const qty = parseFloat(tr.querySelector('input[name="quantity"]').value || '0');
+      const price = parseFloat(tr.querySelector('input[name="unitPrice"]').value || '0');
+      tr.querySelector('input[name="amount"]').value = (qty*price).toFixed(2);
+      recalcTotals();
+    }
+
+    function recalcTotals(){
+      const rows = Array.from(document.querySelectorAll('#items-body tr'));
+      let subtotal = 0;
+      rows.forEach(tr => {
+        const qty = parseFloat(tr.querySelector('input[name="quantity"]').value || '0');
+        const price = parseFloat(tr.querySelector('input[name="unitPrice"]').value || '0');
+        subtotal += qty*price;
+      });
+      const sgstP = parseFloat(document.getElementById('sgstPercent').value || '0');
+      const cgstP = parseFloat(document.getElementById('cgstPercent').value || '0');
+      const discountP = parseFloat(document.getElementById('discountPercent').value || '0');
+
+      const sgstA = subtotal * sgstP / 100;
+      const cgstA = subtotal * cgstP / 100;
+      const grossTotal = subtotal + sgstA + cgstA;
+
+      const discountAmount = grossTotal * discountP / 100;
+      const netTotal = grossTotal - discountAmount;
+
+      document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+      document.getElementById('sgstAmount').textContent = sgstA.toFixed(2);
+      document.getElementById('cgstAmount').textContent = cgstA.toFixed(2);
+      document.getElementById('discountAmount').textContent = discountAmount.toFixed(2);
+      document.getElementById('grandTotal').textContent = netTotal.toFixed(2);
+    }
+
+    async function loadNextInvoiceNumber(){
+      if (!API_BASE || API_BASE.includes('YOUR_DECORMIND_API_BASE_URL')) return;
+      try{
+        const date = document.getElementById('date').value;
+        const res = await fetch(`${API}/quotation/next?date=${encodeURIComponent(date)}`);
+        if(!res.ok) return;
+        const data = await res.json();
+        if(data.quoteNumber){
+          document.getElementById('invoiceNumber').value = data.quoteNumber;
+        }
+      }catch(e){}
+    }
+
+    async function createInvoice(e){
+      e.preventDefault();
+      const status = document.getElementById('status');
+      status.textContent='';
+      status.classList.remove('error');
+      if (!API_BASE || API_BASE.includes('YOUR_DECORMIND_API_BASE_URL')){
+        status.textContent='Please set API_BASE in invoice.html';
+        status.classList.add('error');
+        return;
+      }
+
+      const items = Array.from(document.querySelectorAll('#items-body tr')).map(tr=>{
+        return {
+          description: tr.querySelector('input[name="description"]').value.trim(),
+          hsnCode: tr.querySelector('input[name="hsnCode"]').value.trim(),
+          quantity: parseFloat(tr.querySelector('input[name="quantity"]').value || '0'),
+          unit: tr.querySelector('select[name="unit"]').value,
+          unitPrice: parseFloat(tr.querySelector('input[name="unitPrice"]').value || '0')
+        };
+      }).filter(it=>it.description);
+
+      if(items.length === 0){
+        status.textContent='Add at least one item.';
+        status.classList.add('error');
+        return;
+      }
+
+      const body = {
+        date: document.getElementById('date').value,
+        validUntil: document.getElementById('validUntil').value,
+        customerId: document.getElementById('customerId').value.trim(),
+        customerName: document.getElementById('customerName').value.trim(),
+        customerAddress: document.getElementById('customerAddress').value.trim(),
+        customerPhone: document.getElementById('customerPhone').value.trim(),
+        customerEmail: document.getElementById('customerEmail').value.trim(),
+        descriptionOfWork: document.getElementById('descriptionOfWork').value.trim(),
+        items,
+        sgstPercent: parseFloat(document.getElementById('sgstPercent').value || '0'),
+        cgstPercent: parseFloat(document.getElementById('cgstPercent').value || '0'),
+        discountPercent: parseFloat(document.getElementById('discountPercent').value || '0'),
+        terms: document.getElementById('terms').value.trim(),
+        author: document.getElementById('author').value.trim()
+      };
+
+      try{
+        const res = await fetch(`${API}/quotation`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(body)
+        });
+        if(!res.ok){
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const data = await res.json();
+        document.getElementById('invoiceNumber').value = data.quoteNumber || '';
+        const dl = document.getElementById('downloadBtn');
+        dl.dataset.quotationId = data.id;
+        dl.disabled = false;
+        status.textContent = `Invoice created. Number: ${data.quoteNumber}`;
+      }catch(err){
+        status.textContent = `Failed: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    async function downloadInvoicePdf(){
+      const status = document.getElementById('status');
+      const btn = document.getElementById('downloadBtn');
+      const id = btn.dataset.quotationId;
+      if(!id){
+        status.textContent='Create an invoice first.';
+        status.classList.add('error');
+        return;
+      }
+      try{
+        const res = await fetch(`${API}/quotation/${id}/pdf`);
+        if(!res.ok){
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `invoice-${document.getElementById('invoiceNumber').value || id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }catch(err){
+        status.textContent = `Download failed: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded',()=>{
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth()+1).padStart(2,'0');
+      const dd = String(today.getDate()).padStart(2,'0');
+      document.getElementById('date').value = `${yyyy}-${mm}-${dd}`;
+      addItemRow({});
+      document.getElementById('sgstPercent').value = '0';
+      document.getElementById('cgstPercent').value = '0';
+      document.getElementById('discountPercent').value = '0';
+      recalcTotals();
+      loadNextInvoiceNumber();
+      document.getElementById('sgstPercent').addEventListener('input',recalcTotals);
+      document.getElementById('cgstPercent').addEventListener('input',recalcTotals);
+      document.getElementById('discountPercent').addEventListener('input',recalcTotals);
+      document.getElementById('date').addEventListener('change',loadNextInvoiceNumber);
+    });
+  </script>
+</head>
+<body>
+  <div class="quote-container">
+    <h1 style="margin-top:0; font-size:22px;">Invoice</h1>
+    <p style="font-size:13px; color:#555;">Fill the form to generate a Decormind invoice with discount and download it as PDF.</p>
+
+    <form onsubmit="createInvoice(event)">
+      <div class="quote-grid">
+        <div>
+          <div>
+            <strong>Decormind</strong><br>
+            <small>Phone: 9051365052<br>Email: support@decormind.in<br>Website: decormind.in</small>
+          </div>
+        </div>
+        <div>
+          <table class="quote-table">
+            <tr>
+              <td>INVOICE #</td>
+              <td><input id="invoiceNumber" type="text" placeholder="Auto" readonly></td>
+            </tr>
+            <tr>
+              <td>DATE</td>
+              <td><input id="date" type="date"></td>
+            </tr>
+            <tr>
+              <td>CUSTOMER ID</td>
+              <td><input id="customerId" type="text"></td>
+            </tr>
+            <tr>
+              <td>VALID UNTIL</td>
+              <td><input id="validUntil" type="date"></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="cust-band">CUSTOMER INFO</div>
+      <div class="field-row">
+        <div>
+          <label for="customerName">Name</label>
+          <input id="customerName" type="text" required>
+        </div>
+        <div>
+          <label for="customerPhone">Phone No.</label>
+          <input id="customerPhone" type="text">
+        </div>
+      </div>
+      <div class="field-row">
+        <div>
+          <label for="customerAddress">Address</label>
+          <textarea id="customerAddress" rows="2"></textarea>
+        </div>
+        <div>
+          <label for="customerEmail">Email Id</label>
+          <input id="customerEmail" type="email">
+        </div>
+      </div>
+
+      <div class="band">DESCRIPTION OF WORK</div>
+      <textarea id="descriptionOfWork" rows="3" style="width:100%; margin-top:6px;"></textarea>
+
+      <div class="band" style="margin-top:16px;">ITEMS</div>
+      <div class="items-table-wrapper">
+        <table class="quote-table">
+          <thead>
+            <tr>
+              <th>ITEMS</th>
+              <th>HSN CODE</th>
+              <th>QTY</th>
+              <th>UNIT</th>
+              <th>UNIT PRICE</th>
+              <th>AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody id="items-body"></tbody>
+        </table>
+      </div>
+      <button type="button" style="margin-top:8px;" onclick="addItemRow()">Add Item</button>
+
+      <div class="field-row" style="margin-top:16px; align-items:flex-start;">
+        <div>
+          <label>Taxes &amp; Discount</label>
+          <div class="field-row">
+            <div>
+              <label for="sgstPercent">SGST %</label>
+              <input id="sgstPercent" type="number" step="0.01" min="0">
+            </div>
+            <div>
+              <label for="cgstPercent">CGST %</label>
+              <input id="cgstPercent" type="number" step="0.01" min="0">
+            </div>
+          </div>
+          <div class="field-row" style="margin-top:6px;">
+            <div>
+              <label for="discountPercent">Discount %</label>
+              <input id="discountPercent" type="number" step="0.01" min="0">
+            </div>
+          </div>
+        </div>
+        <div>
+          <label>Totals</label>
+          <table class="quote-table">
+            <tr><td>SUBTOTAL</td><td style="text-align:right;">₹ <span id="subtotal">0.00</span></td></tr>
+            <tr><td>SGST</td><td style="text-align:right;">₹ <span id="sgstAmount">0.00</span></td></tr>
+            <tr><td>CGST</td><td style="text-align:right;">₹ <span id="cgstAmount">0.00</span></td></tr>
+            <tr><td>DISCOUNT</td><td style="text-align:right;">₹ <span id="discountAmount">0.00</span></td></tr>
+            <tr><td><strong>PAYABLE TOTAL</strong></td><td style="text-align:right;"><strong>₹ <span id="grandTotal">0.00</span></strong></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="band" style="margin-top:16px;">Terms &amp; Conditions</div>
+      <textarea id="terms" rows="3" style="width:100%; margin-top:6px;"></textarea>
+
+      <div class="field-row" style="margin-top:16px;">
+        <div>
+          <label for="author">Authors Signature (name)</label>
+          <input id="author" type="text">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit">Create Invoice</button>
+        <button type="button" class="secondary" id="downloadBtn" onclick="downloadInvoicePdf()" disabled>Download PDF</button>
+      </div>
+      <div id="status" class="status"></div>
+    </form>
+  </div>
+</body>
+</html>
+
