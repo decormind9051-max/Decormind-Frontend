@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Decormind Dashboard</title>
 
-  <!-- Icons & layout CSS reused from Arti-Physiotherapist Blog dashboard -->
+  <!-- Decormind main theme (same as index.html) -->
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Icons & layout base from Arti-Physiotherapist (for sidebar structure) -->
   <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <link rel="stylesheet" href="../RikyPhysio/Arti-Physiotherapist/css/Admin-style.css" />
 
   <style>
@@ -82,7 +85,10 @@
     }
 
     body {
-      background: #f3f4f6;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
   </style>
 </head>
@@ -94,15 +100,13 @@
       <span class="text">Admin Panel</span>
     </a>
     <ul class="side-menu top">
-      <li><a href="../RikyPhysio/Arti-Physiotherapist/Blog.html"><i class='bx bxs-dashboard icon'></i><span class="text">Dashboard</span></a></li>
-      <li><a href="../RikyPhysio/Arti-Physiotherapist/SubBlog.html"><i class='bx bxs-image-add icon'></i><span class="text">Service Gallery</span></a></li>
-      <li><a href="../RikyPhysio/Arti-Physiotherapist/select_section_view.html"><i class='bx bxs-slideshow icon'></i><span class="text">Section View</span></a></li>
-      <li><a href="../RikyPhysio/Arti-Physiotherapist/prescription_form.html"><i class='bx bxs-cog icon'></i><span class="text">Create Prescription</span></a></li>
-      <li><a href="../RikyPhysio/Arti-Physiotherapist/invoice.html"><i class='bx bx-receipt icon'></i><span class="text">Create Invoice</span></a></li>
-      <li><a href="../RikyPhysio/Arti-Physiotherapist/video-consultation.html"><i class='bx bxs-video icon'></i><span class="text">Video Consultation</span></a></li>
-      <li><a href="../RikyPhysio/Arti-Physiotherapist/send-video-whatsapp.html"><i class='bx bxs-share icon'></i><span class="text">Shre Video</span></a></li>
-      <!-- New tab for Decormind quotation -->
-      <li class="active"><a href="dashboard.html"><i class='bx bx-file icon'></i><span class="text">Make Quotation</span></a></li>
+      <!-- Single tab: Make Quotation -->
+      <li class="active">
+        <a href="dashboard.html">
+          <i class='bx bx-file icon'></i>
+          <span class="text">Make Quotation</span>
+        </a>
+      </li>
     </ul>
   </section>
 
