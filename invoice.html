@@ -244,11 +244,11 @@
       if (!API_BASE || API_BASE.includes('YOUR_DECORMIND_API_BASE_URL')) return;
       try{
         const date = document.getElementById('date').value;
-        const res = await fetch(`${API}/quotation/next?date=${encodeURIComponent(date)}`);
+        const res = await fetch(`${API}/invoice/next?date=${encodeURIComponent(date)}`);
         if(!res.ok) return;
         const data = await res.json();
-        if(data.quoteNumber){
-          document.getElementById('invoiceNumber').value = data.quoteNumber;
+        if(data.invoiceNumber){
+          document.getElementById('invoiceNumber').value = data.invoiceNumber;
         }
       }catch(e){}
     }
@@ -329,7 +329,7 @@
         return;
       }
       try{
-        const res = await fetch(`${API}/quotation/${id}/pdf`);
+        const res = await fetch(`${API}/invoice/${id}/pdf`);
         if(!res.ok){
           const t = await res.text();
           throw new Error(t);
@@ -367,7 +367,6 @@
       document.getElementById('date').addEventListener('change',loadNextInvoiceNumber);
     });
   </script>
-;</n+  </script>
 </head>
 <body>
   <!-- SIDEBAR (same structure as dashboard.html) -->
