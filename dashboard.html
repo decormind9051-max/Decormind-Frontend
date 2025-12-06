@@ -9,86 +9,157 @@
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Icons & layout base from Arti-Physiotherapist (for sidebar structure) -->
+  <!-- Icons for sidebar -->
   <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../RikyPhysio/Arti-Physiotherapist/css/Admin-style.css" />
 
   <style>
-    /* Same header & sidebar color overrides as Blog.html */
-    #content nav {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-      color: #fff !important;
-      border-bottom: 1px solid rgba(255, 255, 255, .15);
-    }
-
-    .arrowicon {
-      color: #fff !important;
-    }
-
-    #sidebar {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-      color: #fff !important;
-    }
-
-    #sidebar .brand {
-      background: transparent !important;
-      color: #fff !important;
-    }
-
-    #sidebar .brand .bx {
-      color: #fff !important;
-    }
-
-    #sidebar .side-menu li a {
-      background: transparent !important;
-      color: #fff !important;
-    }
-
-    #sidebar .side-menu.top li a:hover {
-      color: #CFE8FF !important;
-    }
-
-    #sidebar .side-menu.top li.active a {
-      color: #CFE8FF !important;
-    }
-
-    #sidebar .side-menu li.active {
-      background: rgba(255, 255, 255, .15) !important;
-    }
-
-    /* Main area that will host the quotation form */
-    .dashboard-main {
-      margin-left: 260px; /* matches typical sidebar width from Admin-style */
-      padding: 80px 20px 20px;
-      box-sizing: border-box;
-    }
-
-    .dashboard-card {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      padding: 10px;
-    }
-
-    .dashboard-card h2 {
-      margin: 0 0 10px;
-      font-size: 20px;
-      font-weight: 600;
-    }
-
-    .quotation-frame {
-      width: 100%;
-      height: 80vh;
-      border: none;
-      border-radius: 8px;
-      background: #f9fafb;
-    }
-
     body {
       margin: 0;
       background: var(--bg);
       color: var(--text);
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ===== Sidebar ===== */
+    #sidebar {
+      width: 260px;
+      background: linear-gradient(135deg, #1f2937, #111827);
+      color: #f9fafb;
+      padding: 1.5rem 1.25rem;
+      box-shadow: 4px 0 18px rgba(15, 23, 42, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    #sidebar .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    #sidebar .brand .bx {
+      font-size: 1.75rem;
+      color: #facc6b;
+    }
+
+    #sidebar .side-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    #sidebar .side-menu li a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 999px;
+      color: #e5e7eb;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background 0.18s ease, transform 0.18s ease, color 0.18s ease;
+    }
+
+    #sidebar .side-menu li a .icon {
+      font-size: 1.2rem;
+    }
+
+    #sidebar .side-menu li.active a,
+    #sidebar .side-menu li a:hover {
+      background: linear-gradient(135deg, #fbbf24, #f97316);
+      color: #111827;
+      transform: translateX(3px);
+    }
+
+    #sidebar .side-menu li.active a .icon {
+      color: #111827;
+    }
+
+    /* ===== Top bar & main content ===== */
+    #content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    #content nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.75rem;
+      background:
+        linear-gradient(90deg, rgba(246,231,218,0.98), rgba(249,242,234,0.98));
+      border-bottom: 1px solid rgba(214,211,209,0.9);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .nav-pill {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(248, 191, 88, 0.18);
+      font-size: 0.78rem;
+      color: #92400e;
+      font-weight: 500;
+    }
+
+    .dashboard-main {
+      padding: 1.75rem 1.75rem 2rem;
+      box-sizing: border-box;
+    }
+
+    .dashboard-card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+      padding: 1.25rem 1.25rem 1rem;
+      border: 1px solid var(--border);
+    }
+
+    .dashboard-card h2 {
+      margin: 0 0 0.25rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .dashboard-subtitle {
+      margin: 0 0 0.9rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .quotation-frame {
+      width: 100%;
+      height: 78vh;
+      border: none;
+      border-radius: 12px;
+      background: #fefaf5;
+      box-shadow: inset 0 0 0 1px rgba(248, 191, 88, 0.35);
     }
   </style>
 </head>
