@@ -148,6 +148,31 @@
       color: var(--muted);
     }
 
+    .history-tabs {
+      display: inline-flex;
+      border-radius: 999px;
+      background: #f3f4f6;
+      padding: 3px;
+      margin-bottom: 0.75rem;
+      gap: 3px;
+    }
+
+    .history-tab {
+      border: none;
+      background: transparent;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: #4b5563;
+    }
+
+    .history-tab.active {
+      background: linear-gradient(135deg, #fbbf24, #f97316);
+      color: #111827;
+      font-weight: 500;
+    }
+
     .history-table-wrapper {
       margin-top: 1rem;
       background: #fff;
@@ -210,7 +235,7 @@
         }
         const data = await res.json();
         const items = Array.isArray(data.items) ? data.items : [];
-        const tbody = document.getElementById('history-body');
+        const tbody = document.getElementById('invoice-history-body');
         tbody.innerHTML = '';
 
         if (items.length === 0) {
@@ -269,8 +294,103 @@
       }
     }
 
+    async function loadQuotations() {
+      const status = document.getElementById('status');
+      status.textContent = '';
+      status.classList.remove('error');
+
+      try {
+        const res = await fetch(`${API}/quotations`);
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const data = await res.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        const tbody = document.getElementById('quotation-history-body');
+        tbody.innerHTML = '';
+
+        if (items.length === 0) {
+          status.textContent = 'No quotations found.';
+          return;
+        }
+
+        items.forEach((qt) => {
+          const tr = document.createElement('tr');
+          const quoteNo = qt.quoteNumber || '';
+          const dateStr = qt.date ? new Date(qt.date).toLocaleDateString('en-IN') : '';
+          const total = typeof qt.total === 'number' ? qt.total.toFixed(2) : '';
+
+          tr.innerHTML = `
+            <td>${quoteNo}</td>
+            <td>${dateStr}</td>
+            <td>${qt.customerName || ''}</td>
+            <td style="text-align:right;">₹ ${total}</td>
+            <td class="history-actions">
+              <button type="button" onclick="downloadQuotation('${qt._id}')">Download</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        status.textContent = `Failed to load quotations: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    async function downloadQuotation(id) {
+      const status = document.getElementById('status');
+      status.textContent = '';
+      status.classList.remove('error');
+
+      if (!id) return;
+      try {
+        const res = await fetch(`${API}/quotation/${id}/pdf`);
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `quotation-${id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        status.textContent = `Download failed: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    function setActiveTab(tab) {
+      const invoiceTab = document.getElementById('tab-invoices');
+      const quotationTab = document.getElementById('tab-quotations');
+      const invoiceSection = document.getElementById('invoice-history-section');
+      const quotationSection = document.getElementById('quotation-history-section');
+      const status = document.getElementById('status');
+      status.textContent = '';
+      status.classList.remove('error');
+
+      if (tab === 'invoices') {
+        invoiceTab.classList.add('active');
+        quotationTab.classList.remove('active');
+        invoiceSection.style.display = '';
+        quotationSection.style.display = 'none';
+        loadInvoices();
+      } else {
+        invoiceTab.classList.remove('active');
+        quotationTab.classList.add('active');
+        invoiceSection.style.display = 'none';
+        quotationSection.style.display = '';
+        loadQuotations();
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
-      loadInvoices();
+      setActiveTab('invoices');
     });
   </script>
 </head>
@@ -313,9 +433,14 @@
     <div class="dashboard-main">
       <div class="dashboard-card">
         <h2>Client History</h2>
-        <p class="dashboard-subtitle">View all generated invoices and download them anytime.</p>
+        <p class="dashboard-subtitle">View all generated invoices and quotations and download them anytime.</p>
 
-        <div class="history-table-wrapper">
+        <div class="history-tabs">
+          <button id="tab-invoices" class="history-tab active" type="button" onclick="setActiveTab('invoices')">Invoices</button>
+          <button id="tab-quotations" class="history-tab" type="button" onclick="setActiveTab('quotations')">Quotations</button>
+        </div>
+
+        <div id="invoice-history-section" class="history-table-wrapper">
           <table class="history-table">
             <thead>
               <tr>
@@ -326,7 +451,22 @@
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody id="history-body"></tbody>
+            <tbody id="invoice-history-body"></tbody>
+          </table>
+        </div>
+
+        <div id="quotation-history-section" class="history-table-wrapper" style="display:none;">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Quotation #</th>
+                <th>Date</th>
+                <th>Client Name</th>
+                <th>Total</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="quotation-history-body"></tbody>
           </table>
         </div>
 
