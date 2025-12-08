@@ -248,7 +248,9 @@
         if(!res.ok) return;
         const data = await res.json();
         if(data.invoiceNumber){
-          document.getElementById('invoiceNumber').value = data.invoiceNumber;
+          const raw = data.invoiceNumber;
+          const display = raw.endsWith('DECORMIND') ? raw.replace(/DECORMIND$/, 'DM') : raw;
+          document.getElementById('invoiceNumber').value = display;
         }
       }catch(e){}
     }
@@ -309,11 +311,13 @@
           throw new Error(t);
         }
         const data = await res.json(); // { id, invoiceNumber, totalPayable }
-        document.getElementById('invoiceNumber').value = data.invoiceNumber || '';
+        const rawInv = data.invoiceNumber || '';
+        const displayInv = rawInv.endsWith('DECORMIND') ? rawInv.replace(/DECORMIND$/, 'DM') : rawInv;
+        document.getElementById('invoiceNumber').value = displayInv;
         const dl = document.getElementById('downloadBtn');
         dl.dataset.invoiceId = data.id; // store invoice id for PDF download
         dl.disabled = false;
-        status.textContent = `Invoice created. Number: ${data.invoiceNumber}`;
+        status.textContent = `Invoice created. Number: ${displayInv}`;
       }catch(err){
         status.textContent = `Failed: ${err.message || err}`;
         status.classList.add('error');
