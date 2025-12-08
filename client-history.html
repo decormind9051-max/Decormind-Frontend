@@ -250,6 +250,7 @@
     let quotationItemsCache = [];
     let sortField = 'date'; // 'date' or 'name'
     let sortOrder = 'desc'; // 'desc' or 'asc'
+    let clientFilter = '';
 
     function renderInvoices() {
       const tbody = document.getElementById('invoice-history-body');
@@ -258,12 +259,20 @@
       status.textContent = '';
       status.classList.remove('error');
 
-      if (!Array.isArray(invoiceItemsCache) || invoiceItemsCache.length === 0) {
+      const filtered = Array.isArray(invoiceItemsCache)
+        ? invoiceItemsCache.filter((inv) => {
+            if (!clientFilter) return true;
+            const name = (inv.customerName || '').toLowerCase();
+            return name.includes(clientFilter);
+          })
+        : [];
+
+      if (filtered.length === 0) {
         status.textContent = 'No invoices found.';
         return;
       }
 
-      const items = [...invoiceItemsCache].sort((a, b) => {
+      const items = filtered.sort((a, b) => {
         if (sortField === 'name') {
           const na = (a.customerName || '').toLowerCase();
           const nb = (b.customerName || '').toLowerCase();
@@ -351,12 +360,20 @@
       status.textContent = '';
       status.classList.remove('error');
 
-      if (!Array.isArray(quotationItemsCache) || quotationItemsCache.length === 0) {
+      const filtered = Array.isArray(quotationItemsCache)
+        ? quotationItemsCache.filter((qt) => {
+            if (!clientFilter) return true;
+            const name = (qt.customerName || '').toLowerCase();
+            return name.includes(clientFilter);
+          })
+        : [];
+
+      if (filtered.length === 0) {
         status.textContent = 'No quotations found.';
         return;
       }
 
-      const items = [...quotationItemsCache].sort((a, b) => {
+      const items = filtered.sort((a, b) => {
         if (sortField === 'name') {
           const na = (a.customerName || '').toLowerCase();
           const nb = (b.customerName || '').toLowerCase();
@@ -480,6 +497,16 @@
       }
     }
 
+    function onClientFilterChange(value) {
+      clientFilter = (value || '').toLowerCase();
+      const invoiceSection = document.getElementById('invoice-history-section');
+      if (invoiceSection.style.display === 'none') {
+        renderQuotations();
+      } else {
+        renderInvoices();
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       setActiveTab('invoices');
     });
@@ -532,6 +559,9 @@
             <button id="tab-quotations" class="history-tab" type="button" onclick="setActiveTab('quotations')">Quotations</button>
           </div>
           <div class="history-controls">
+            <label for="client-filter">Client name:
+              <input id="client-filter" type="text" placeholder="Search client" oninput="onClientFilterChange(this.value)" />
+            </label>
             <label for="sort-field">Sort by:
               <select id="sort-field" onchange="onSortFieldChange(this.value)">
                 <option value="date" selected>Date</option>
