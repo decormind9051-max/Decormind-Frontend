@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decormind Client History</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Sidebar (same as invoice.html) */
+    #sidebar {
+      width: 260px;
+      background: linear-gradient(135deg, #1f2937, #111827);
+      color: #f9fafb;
+      padding: 1.5rem 1.25rem;
+      box-shadow: 4px 0 18px rgba(15, 23, 42, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    #sidebar .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    #sidebar .brand .bx {
+      font-size: 1.75rem;
+      color: #facc6b;
+    }
+
+    #sidebar .side-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    #sidebar .side-menu li a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 999px;
+      color: #e5e7eb;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background 0.18s ease, transform 0.18s ease, color 0.18s ease;
+    }
+
+    #sidebar .side-menu li a .icon {
+      font-size: 1.2rem;
+    }
+
+    #sidebar .side-menu li.active a,
+    #sidebar .side-menu li a:hover {
+      background: linear-gradient(135deg, #fbbf24, #f97316);
+      color: #111827;
+      transform: translateX(3px);
+    }
+
+    #sidebar .side-menu li.active a .icon {
+      color: #111827;
+    }
+
+    /* Content wrapper & nav (same as invoice.html) */
+    #content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    #content nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.75rem;
+      background:
+        linear-gradient(90deg, rgba(246,231,218,0.98), rgba(249,242,234,0.98));
+      border-bottom: 1px solid rgba(214,211,209,0.9);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .nav-pill {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(248, 191, 88, 0.18);
+      font-size: 0.78rem;
+      color: #92400e;
+      font-weight: 500;
+    }
+
+    .dashboard-main {
+      padding: 1.75rem 1.75rem 2rem;
+      box-sizing: border-box;
+    }
+
+    .dashboard-card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+      padding: 1.25rem 1.25rem 1rem;
+      border: 1px solid var(--border);
+    }
+
+    .dashboard-card h2 {
+      margin: 0 0 0.25rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .dashboard-subtitle {
+      margin: 0 0 0.9rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .history-table-wrapper {
+      margin-top: 1rem;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e5e5e5;
+      box-shadow: 0 10px 30px rgba(0,0,0,.06);
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    table.history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    table.history-table th,
+    table.history-table td {
+      border: 1px solid #e5e5e5;
+      padding: 6px 8px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    table.history-table th {
+      background: #f4d48a;
+    }
+
+    .history-actions button {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: none;
+      background: #111827;
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #065f46;
+    }
+    .status.error { color: #b91c1c; }
+  </style>
+  <script>
+    const API_BASE = 'https://vzw780l2gg.execute-api.ap-south-1.amazonaws.com';
+    const API = API_BASE.replace(/\/$/, '');
+
+    async function loadInvoices() {
+      const status = document.getElementById('status');
+      status.textContent = '';
+      status.classList.remove('error');
+
+      try {
+        const res = await fetch(`${API}/invoices`);
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const data = await res.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        const tbody = document.getElementById('history-body');
+        tbody.innerHTML = '';
+
+        if (items.length === 0) {
+          status.textContent = 'No invoices found.';
+          return;
+        }
+
+        items.forEach((inv) => {
+          const tr = document.createElement('tr');
+          const rawInv = inv.invoiceNumber || '';
+          const displayInv = rawInv.endsWith('DECORMIND') ? rawInv.replace(/DECORMIND$/, 'DM') : rawInv;
+          const dateStr = inv.date ? new Date(inv.date).toLocaleDateString('en-IN') : '';
+          const total = typeof inv.totalPayable === 'number' ? inv.totalPayable.toFixed(2) : '';
+
+          tr.innerHTML = `
+            <td>${displayInv}</td>
+            <td>${dateStr}</td>
+            <td>${inv.customerName || ''}</td>
+            <td style="text-align:right;">₹ ${total}</td>
+            <td class="history-actions">
+              <button type="button" onclick="downloadInvoice('${inv._id}')">Download</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        status.textContent = `Failed to load invoices: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    async function downloadInvoice(id) {
+      const status = document.getElementById('status');
+      status.textContent = '';
+      status.classList.remove('error');
+
+      if (!id) return;
+      try {
+        const res = await fetch(`${API}/invoice/${id}/pdf`);
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `invoice-${id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        status.textContent = `Download failed: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadInvoices();
+    });
+  </script>
+</head>
+<body>
+  <!-- SIDEBAR (same as invoice.html) -->
+  <section id="sidebar">
+    <a href="index.html" class="brand">
+      <i class='bx bx-home-heart'></i>
+      <span class="text">Decormind</span>
+    </a>
+    <ul class="side-menu top">
+      <li>
+        <a href="dashboard.html">
+          <i class='bx bx-file icon'></i>
+          <span class="text">Make Quotation</span>
+        </a>
+      </li>
+      <li>
+        <a href="invoice.html">
+          <i class='bx bx-receipt icon'></i>
+          <span class="text">Invoice</span>
+        </a>
+      </li>
+      <li class="active">
+        <a href="client-history.html">
+          <i class='bx bx-user icon'></i>
+          <span class="text">Client History</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- CONTENT AREA -->
+  <section id="content">
+    <nav>
+      <div class="nav-title">Client invoice history</div>
+      <div class="nav-pill">Decormind · Dashboard</div>
+    </nav>
+
+    <div class="dashboard-main">
+      <div class="dashboard-card">
+        <h2>Client History</h2>
+        <p class="dashboard-subtitle">View all generated invoices and download them anytime.</p>
+
+        <div class="history-table-wrapper">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Invoice #</th>
+                <th>Date</th>
+                <th>Client Name</th>
+                <th>Total</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="history-body"></tbody>
+          </table>
+        </div>
+
+        <div id="status" class="status"></div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
