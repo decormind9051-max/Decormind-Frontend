@@ -1092,25 +1092,35 @@
           joinError.textContent = '';
 
           const selectedRole = document.querySelector('input[name="role"]:checked')?.value || 'patient';
-          userType = selectedRole;
 
-          if (userType === 'patient') {
-            userId = patientIdInput ? patientIdInput.value.trim() : '';
-            if (!userId) {
-              userId = `patient_${Date.now()}`;
-            }
-            peerId = 'therapist1';
+          if (selectedRole === 'patient') {
+            // Mirror Arti behavior: generate patient id, clear session/peer, auto-join via polling
+            userType = 'patient';
+            userId = patientIdInput && patientIdInput.value.trim() ? patientIdInput.value.trim() : `patient_${Date.now()}`;
+            peerId = '';
+            sessionId = '';
+            hideJoinModal();
+            updateUrlParams();
+            updateUIForUserType();
+            await autoJoinPatientSession();
           } else {
-            userId = therapistIdInput ? therapistIdInput.value.trim() : '';
-            const patientId = therapistPatientIdInput ? therapistPatientIdInput.value.trim() : '';
-            if (!userId) {
-              userId = `therapist_${Date.now()}`;
-            }
-            peerId = patientId || 'patient1';
-          }
+            // Therapist: create a session first via backend, then initConsultation with new sessionId
+            const therapistIdVal = therapistIdInput && therapistIdInput.value.trim()
+              ? therapistIdInput.value.trim()
+              : `therapist_${Date.now()}`;
+            const generatedPatientId = therapistPatientIdInput && therapistPatientIdInput.value.trim()
+              ? therapistPatientIdInput.value.trim()
+              : `patient_${Date.now()}`;
 
-          hideJoinModal();
-          await initConsultation();
+            userType = 'therapist';
+            userId = therapistIdVal;
+            peerId = generatedPatientId;
+            sessionId = '';
+            hideJoinModal();
+            updateUrlParams();
+            updateUIForUserType();
+            await createSessionForPhysiotherapist(therapistIdVal, generatedPatientId);
+          }
 
         } catch (error) {
           console.error('Join error:', error);
@@ -1139,13 +1149,114 @@
       });
     }
 
+    // Session helpers mirrored from Arti implementation
+    async function createSessionForPhysiotherapist(therapistIdVal, patientIdVal) {
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      try {
+        document.getElementById('errorMessage').classList.remove('show');
+        updateStatus('connecting', 'Creating consultation session...');
+        if (loadingIndicator) loadingIndicator.style.display = 'block';
+
+        const response = await fetch(`${API_BASE_URL}/sessions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            patientId: patientIdVal,
+            patientName: 'Patient',
+            physiotherapistId: therapistIdVal,
+            physiotherapistName: 'Physiotherapist'
+          })
+        });
+
+        const data = await response.json();
+        if (!data.success || !data.session) {
+          throw new Error(data.error || 'Failed to create consultation session.');
+        }
+
+        currentSession = data.session;
+        sessionId = data.session.sessionId;
+        peerId = patientIdVal;
+        userType = 'therapist';
+        userId = therapistIdVal;
+        updateUrlParams();
+        updateUIForUserType();
+        await initConsultation();
+      } catch (error) {
+        console.error('Error creating session:', error);
+        if (loadingIndicator) loadingIndicator.style.display = 'none';
+        joinError.textContent = error.message || 'Failed to create session. Please try again.';
+        joinError.classList.remove('hidden');
+        showJoinModal();
+      }
+    }
+
+    async function autoJoinPatientSession() {
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      try {
+        document.getElementById('errorMessage').classList.remove('show');
+        updateStatus('waiting', 'Waiting for physiotherapist to start...');
+        if (loadingIndicator) loadingIndicator.style.display = 'block';
+        const maxAttempts = 15;
+        const intervalMs = 2000;
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+          try {
+            const resp = await fetch(`${API_BASE_URL}/sessions?status=pending`);
+            const data = await resp.json();
+            if (data.success && Array.isArray(data.sessions) && data.sessions.length > 0) {
+              const latest = data.sessions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+              currentSession = latest;
+              sessionId = latest.sessionId;
+              peerId = latest.physiotherapistId || peerId || 'therapist1';
+              userType = 'patient';
+              userId = userId || `patient_${Date.now()}`;
+              updateUrlParams();
+              updateUIForUserType();
+              await initConsultation();
+              return;
+            }
+          } catch (e) {
+            console.warn('Polling pending sessions failed:', e);
+          }
+          await new Promise((r) => setTimeout(r, intervalMs));
+        }
+        // Try active sessions as a fallback
+        try {
+          const respActive = await fetch(`${API_BASE_URL}/sessions?status=active`);
+          const dataActive = await respActive.json();
+          if (dataActive.success && Array.isArray(dataActive.sessions) && dataActive.sessions.length > 0) {
+            const latestActive = dataActive.sessions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+            currentSession = latestActive;
+            sessionId = latestActive.sessionId;
+            peerId = latestActive.physiotherapistId || peerId || 'therapist1';
+            userType = 'patient';
+            userId = userId || `patient_${Date.now()}`;
+            updateUrlParams();
+            updateUIForUserType();
+            await initConsultation();
+            return;
+          }
+        } catch (e2) {
+          console.warn('Polling active sessions failed:', e2);
+        }
+        showError('No consultation available yet. Please try again shortly.');
+        showJoinModal();
+      } finally {
+        if (loadingIndicator) loadingIndicator.style.display = 'none';
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       // Auto-join behavior for patients coming from the website
       if (userType === 'patient' && autoJoin) {
-        initConsultation();
+        autoJoinPatientSession();
       } else {
-        // Show join modal by default for other cases
-        showJoinModal();
+        // Show join modal by default for other cases OR auto-start when session info present
+        const autoStart = (userType === 'therapist' && sessionId) || (userType === 'patient' && (peerId || sessionId));
+        if (autoStart) {
+          initConsultation();
+        } else {
+          showJoinModal();
+        }
       }
 
       // Set up control buttons
