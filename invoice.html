@@ -174,7 +174,60 @@
     .actions button.secondary { background:#111827; }
     .status { margin-top:10px; font-size:13px; color:#065f46; }
     .status.error { color:#b91c1c; }
-    @media (max-width:768px){ .quote-grid { grid-template-columns:1fr; } }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      #sidebar {
+        width: 100%;
+        position: relative;
+        min-height: auto;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+      }
+
+      #sidebar .side-menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+      }
+
+      #sidebar .side-menu li a {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+      }
+
+      #content nav {
+        padding: 0.6rem 1rem;
+      }
+
+      .dashboard-main {
+        padding: 1rem;
+      }
+
+      .quote-container {
+        margin: 0;
+        padding: 16px;
+        border-radius: 10px;
+      }
+
+      .quote-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
   </style>
   <script>
     const API_BASE = 'https://vzw780l2gg.execute-api.ap-south-1.amazonaws.com';

@@ -242,6 +242,60 @@
       color: #065f46;
     }
     .status.error { color: #b91c1c; }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      #sidebar {
+        width: 100%;
+        position: relative;
+        min-height: auto;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+      }
+
+      #sidebar .side-menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+      }
+
+      #sidebar .side-menu li a {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+      }
+
+      #content nav {
+        padding: 0.6rem 1rem;
+      }
+
+      .dashboard-main {
+        padding: 1rem;
+      }
+
+      .history-header-row {
+        align-items: flex-start;
+      }
+
+      .history-controls {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .history-controls label {
+        width: 100%;
+      }
+
+      .history-controls input,
+      .history-controls select {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
   </style>
   <script>
     const API_BASE = 'https://vzw780l2gg.execute-api.ap-south-1.amazonaws.com';
