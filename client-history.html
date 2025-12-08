@@ -173,6 +173,28 @@
       font-weight: 500;
     }
 
+    .history-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .history-controls {
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+
+    .history-controls select {
+      font-size: 0.8rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      color: #111827;
+    }
+
     .history-table-wrapper {
       margin-top: 1rem;
       background: #fff;
@@ -221,6 +243,47 @@
   <script>
     const API_BASE = 'https://vzw780l2gg.execute-api.ap-south-1.amazonaws.com';
     const API = API_BASE.replace(/\/$/, '');
+    let invoiceItemsCache = [];
+    let quotationItemsCache = [];
+    let sortOrder = 'desc'; // 'desc' = newest first, 'asc' = oldest first
+
+    function renderInvoices() {
+      const tbody = document.getElementById('invoice-history-body');
+      tbody.innerHTML = '';
+      const status = document.getElementById('status');
+      status.textContent = '';
+      status.classList.remove('error');
+
+      if (!Array.isArray(invoiceItemsCache) || invoiceItemsCache.length === 0) {
+        status.textContent = 'No invoices found.';
+        return;
+      }
+
+      const items = [...invoiceItemsCache].sort((a, b) => {
+        const da = a.date ? new Date(a.date).getTime() : 0;
+        const db = b.date ? new Date(b.date).getTime() : 0;
+        return sortOrder === 'desc' ? db - da : da - db;
+      });
+
+      items.forEach((inv) => {
+        const tr = document.createElement('tr');
+        const rawInv = inv.invoiceNumber || '';
+        const displayInv = rawInv.endsWith('DECORMIND') ? rawInv.replace(/DECORMIND$/, 'DM') : rawInv;
+        const dateStr = inv.date ? new Date(inv.date).toLocaleDateString('en-IN') : '';
+        const total = typeof inv.totalPayable === 'number' ? inv.totalPayable.toFixed(2) : '';
+
+        tr.innerHTML = `
+          <td>${displayInv}</td>
+          <td>${dateStr}</td>
+          <td>${inv.customerName || ''}</td>
+          <td style="text-align:right;">₹ ${total}</td>
+          <td class="history-actions">
+            <button type="button" onclick="downloadInvoice('${inv._id}')">Download</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
 
     async function loadInvoices() {
       const status = document.getElementById('status');
@@ -234,33 +297,8 @@
           throw new Error(t);
         }
         const data = await res.json();
-        const items = Array.isArray(data.items) ? data.items : [];
-        const tbody = document.getElementById('invoice-history-body');
-        tbody.innerHTML = '';
-
-        if (items.length === 0) {
-          status.textContent = 'No invoices found.';
-          return;
-        }
-
-        items.forEach((inv) => {
-          const tr = document.createElement('tr');
-          const rawInv = inv.invoiceNumber || '';
-          const displayInv = rawInv.endsWith('DECORMIND') ? rawInv.replace(/DECORMIND$/, 'DM') : rawInv;
-          const dateStr = inv.date ? new Date(inv.date).toLocaleDateString('en-IN') : '';
-          const total = typeof inv.totalPayable === 'number' ? inv.totalPayable.toFixed(2) : '';
-
-          tr.innerHTML = `
-            <td>${displayInv}</td>
-            <td>${dateStr}</td>
-            <td>${inv.customerName || ''}</td>
-            <td style="text-align:right;">₹ ${total}</td>
-            <td class="history-actions">
-              <button type="button" onclick="downloadInvoice('${inv._id}')">Download</button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
+        invoiceItemsCache = Array.isArray(data.items) ? data.items : [];
+        renderInvoices();
       } catch (err) {
         status.textContent = `Failed to load invoices: ${err.message || err}`;
         status.classList.add('error');
@@ -294,6 +332,43 @@
       }
     }
 
+    function renderQuotations() {
+      const tbody = document.getElementById('quotation-history-body');
+      tbody.innerHTML = '';
+      const status = document.getElementById('status');
+      status.textContent = '';
+      status.classList.remove('error');
+
+      if (!Array.isArray(quotationItemsCache) || quotationItemsCache.length === 0) {
+        status.textContent = 'No quotations found.';
+        return;
+      }
+
+      const items = [...quotationItemsCache].sort((a, b) => {
+        const da = a.date ? new Date(a.date).getTime() : 0;
+        const db = b.date ? new Date(b.date).getTime() : 0;
+        return sortOrder === 'desc' ? db - da : da - db;
+      });
+
+      items.forEach((qt) => {
+        const tr = document.createElement('tr');
+        const quoteNo = qt.quoteNumber || '';
+        const dateStr = qt.date ? new Date(qt.date).toLocaleDateString('en-IN') : '';
+        const total = typeof qt.total === 'number' ? qt.total.toFixed(2) : '';
+
+        tr.innerHTML = `
+          <td>${quoteNo}</td>
+          <td>${dateStr}</td>
+          <td>${qt.customerName || ''}</td>
+          <td style="text-align:right;">₹ ${total}</td>
+          <td class="history-actions">
+            <button type="button" onclick="downloadQuotation('${qt._id}')">Download</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
     async function loadQuotations() {
       const status = document.getElementById('status');
       status.textContent = '';
@@ -306,32 +381,8 @@
           throw new Error(t);
         }
         const data = await res.json();
-        const items = Array.isArray(data.items) ? data.items : [];
-        const tbody = document.getElementById('quotation-history-body');
-        tbody.innerHTML = '';
-
-        if (items.length === 0) {
-          status.textContent = 'No quotations found.';
-          return;
-        }
-
-        items.forEach((qt) => {
-          const tr = document.createElement('tr');
-          const quoteNo = qt.quoteNumber || '';
-          const dateStr = qt.date ? new Date(qt.date).toLocaleDateString('en-IN') : '';
-          const total = typeof qt.total === 'number' ? qt.total.toFixed(2) : '';
-
-          tr.innerHTML = `
-            <td>${quoteNo}</td>
-            <td>${dateStr}</td>
-            <td>${qt.customerName || ''}</td>
-            <td style="text-align:right;">₹ ${total}</td>
-            <td class="history-actions">
-              <button type="button" onclick="downloadQuotation('${qt._id}')">Download</button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
+        quotationItemsCache = Array.isArray(data.items) ? data.items : [];
+        renderQuotations();
       } catch (err) {
         status.textContent = `Failed to load quotations: ${err.message || err}`;
         status.classList.add('error');
@@ -389,6 +440,16 @@
       }
     }
 
+    function onSortOrderChange(value) {
+      sortOrder = value === 'asc' ? 'asc' : 'desc';
+      const invoiceSection = document.getElementById('invoice-history-section');
+      if (invoiceSection.style.display === 'none') {
+        renderQuotations();
+      } else {
+        renderInvoices();
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       setActiveTab('invoices');
     });
@@ -435,9 +496,19 @@
         <h2>Client History</h2>
         <p class="dashboard-subtitle">View all generated invoices and quotations and download them anytime.</p>
 
-        <div class="history-tabs">
-          <button id="tab-invoices" class="history-tab active" type="button" onclick="setActiveTab('invoices')">Invoices</button>
-          <button id="tab-quotations" class="history-tab" type="button" onclick="setActiveTab('quotations')">Quotations</button>
+        <div class="history-header-row">
+          <div class="history-tabs">
+            <button id="tab-invoices" class="history-tab active" type="button" onclick="setActiveTab('invoices')">Invoices</button>
+            <button id="tab-quotations" class="history-tab" type="button" onclick="setActiveTab('quotations')">Quotations</button>
+          </div>
+          <div class="history-controls">
+            <label for="sort-order">Sort by date:
+              <select id="sort-order" onchange="onSortOrderChange(this.value)">
+                <option value="desc" selected>Newest first</option>
+                <option value="asc">Oldest first</option>
+              </select>
+            </label>
+          </div>
         </div>
 
         <div id="invoice-history-section" class="history-table-wrapper">
