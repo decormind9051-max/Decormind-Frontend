@@ -184,6 +184,23 @@
       margin-right: 0.25rem;
     }
 
+    .sidebar-close {
+      display: none;
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      border: none;
+      background: rgba(15,23,42,0.85);
+      color: #f9fafb;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 25;
+    }
+
     @media (max-width: 768px) {
       body {
         flex-direction: row;
@@ -214,6 +231,12 @@
       }
 
       .sidebar-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .sidebar-close {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -421,10 +444,17 @@
 
     function setupSidebarToggle(){
       const btn = document.getElementById('sidebarToggle');
-      if (!btn) return;
-      btn.addEventListener('click', () => {
-        document.body.classList.toggle('sidebar-open');
-      });
+      const closeBtn = document.getElementById('sidebarClose');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          document.body.classList.toggle('sidebar-open');
+        });
+      }
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          document.body.classList.remove('sidebar-open');
+        });
+      }
     }
 
     window.addEventListener('DOMContentLoaded',()=>{
@@ -450,6 +480,7 @@
 <body>
   <!-- SIDEBAR (same structure as dashboard.html) -->
   <section id="sidebar">
+    <button id="sidebarClose" class="sidebar-close" type="button">×</button>
     <a href="index.html" class="brand">
       <i class='bx bx-home-heart'></i>
       <span class="text">Decormind</span>
