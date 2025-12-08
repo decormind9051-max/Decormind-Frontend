@@ -298,7 +298,8 @@
       };
 
       try{
-        const res = await fetch(`${API}/quotation`,{
+        // Create real Invoice document in Decormind-Backend
+        const res = await fetch(`${API}/invoice`,{
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body: JSON.stringify(body)
@@ -307,12 +308,12 @@
           const t = await res.text();
           throw new Error(t);
         }
-        const data = await res.json();
-        document.getElementById('invoiceNumber').value = data.quoteNumber || '';
+        const data = await res.json(); // { id, invoiceNumber, totalPayable }
+        document.getElementById('invoiceNumber').value = data.invoiceNumber || '';
         const dl = document.getElementById('downloadBtn');
-        dl.dataset.quotationId = data.id;
+        dl.dataset.invoiceId = data.id; // store invoice id for PDF download
         dl.disabled = false;
-        status.textContent = `Invoice created. Number: ${data.quoteNumber}`;
+        status.textContent = `Invoice created. Number: ${data.invoiceNumber}`;
       }catch(err){
         status.textContent = `Failed: ${err.message || err}`;
         status.classList.add('error');
@@ -322,7 +323,7 @@
     async function downloadInvoicePdf(){
       const status = document.getElementById('status');
       const btn = document.getElementById('downloadBtn');
-      const id = btn.dataset.quotationId;
+      const id = btn.dataset.invoiceId; // use invoice id, not quotation id
       if(!id){
         status.textContent='Create an invoice first.';
         status.classList.add('error');
