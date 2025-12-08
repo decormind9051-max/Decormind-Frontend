@@ -182,6 +182,9 @@
     }
 
     .history-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       font-size: 0.8rem;
       color: #4b5563;
     }
@@ -245,7 +248,8 @@
     const API = API_BASE.replace(/\/$/, '');
     let invoiceItemsCache = [];
     let quotationItemsCache = [];
-    let sortOrder = 'desc'; // 'desc' = newest first, 'asc' = oldest first
+    let sortField = 'date'; // 'date' or 'name'
+    let sortOrder = 'desc'; // 'desc' or 'asc'
 
     function renderInvoices() {
       const tbody = document.getElementById('invoice-history-body');
@@ -260,9 +264,17 @@
       }
 
       const items = [...invoiceItemsCache].sort((a, b) => {
-        const da = a.date ? new Date(a.date).getTime() : 0;
-        const db = b.date ? new Date(b.date).getTime() : 0;
-        return sortOrder === 'desc' ? db - da : da - db;
+        if (sortField === 'name') {
+          const na = (a.customerName || '').toLowerCase();
+          const nb = (b.customerName || '').toLowerCase();
+          if (na < nb) return sortOrder === 'asc' ? -1 : 1;
+          if (na > nb) return sortOrder === 'asc' ? 1 : -1;
+          return 0;
+        } else {
+          const da = a.date ? new Date(a.date).getTime() : 0;
+          const db = b.date ? new Date(b.date).getTime() : 0;
+          return sortOrder === 'desc' ? db - da : da - db;
+        }
       });
 
       items.forEach((inv) => {
@@ -345,9 +357,17 @@
       }
 
       const items = [...quotationItemsCache].sort((a, b) => {
-        const da = a.date ? new Date(a.date).getTime() : 0;
-        const db = b.date ? new Date(b.date).getTime() : 0;
-        return sortOrder === 'desc' ? db - da : da - db;
+        if (sortField === 'name') {
+          const na = (a.customerName || '').toLowerCase();
+          const nb = (b.customerName || '').toLowerCase();
+          if (na < nb) return sortOrder === 'asc' ? -1 : 1;
+          if (na > nb) return sortOrder === 'asc' ? 1 : -1;
+          return 0;
+        } else {
+          const da = a.date ? new Date(a.date).getTime() : 0;
+          const db = b.date ? new Date(b.date).getTime() : 0;
+          return sortOrder === 'desc' ? db - da : da - db;
+        }
       });
 
       items.forEach((qt) => {
@@ -440,6 +460,16 @@
       }
     }
 
+    function onSortFieldChange(value) {
+      sortField = value === 'name' ? 'name' : 'date';
+      const invoiceSection = document.getElementById('invoice-history-section');
+      if (invoiceSection.style.display === 'none') {
+        renderQuotations();
+      } else {
+        renderInvoices();
+      }
+    }
+
     function onSortOrderChange(value) {
       sortOrder = value === 'asc' ? 'asc' : 'desc';
       const invoiceSection = document.getElementById('invoice-history-section');
@@ -502,10 +532,16 @@
             <button id="tab-quotations" class="history-tab" type="button" onclick="setActiveTab('quotations')">Quotations</button>
           </div>
           <div class="history-controls">
-            <label for="sort-order">Sort by date:
+            <label for="sort-field">Sort by:
+              <select id="sort-field" onchange="onSortFieldChange(this.value)">
+                <option value="date" selected>Date</option>
+                <option value="name">Client name</option>
+              </select>
+            </label>
+            <label for="sort-order">Order:
               <select id="sort-order" onchange="onSortOrderChange(this.value)">
-                <option value="desc" selected>Newest first</option>
-                <option value="asc">Oldest first</option>
+                <option value="desc" selected>Descending</option>
+                <option value="asc">Ascending</option>
               </select>
             </label>
           </div>
