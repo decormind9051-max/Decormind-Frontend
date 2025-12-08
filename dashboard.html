@@ -264,6 +264,187 @@
       }
     }
   </style>
+  <script>
+    const API_BASE = 'https://vzw780l2gg.execute-api.ap-south-1.amazonaws.com';
+    const API = API_BASE.replace(/\/$/, '');
+
+    function addItemRow(prefill = {}) {
+      const tbody = document.getElementById('items-body');
+      const tr = document.createElement('tr');
+      const unit = prefill.unit || '1 unit';
+      tr.innerHTML = `
+        <td><input type="text" name="description" placeholder="Item description" value="${prefill.description || ''}" required></td>
+        <td><input type="text" name="hsnCode" placeholder="HSN Code" value="${prefill.hsnCode || ''}"></td>
+        <td><input type="number" name="quantity" min="1" step="1" value="${prefill.quantity || 1}" oninput="recalcRow(this)" required></td>
+        <td>
+          <select name="unit">
+            <option value="1 unit" ${unit === '1 unit' ? 'selected' : ''}>1 unit</option>
+            <option value="1 sqmm" ${unit === '1 sqmm' ? 'selected' : ''}>1 sqmm</option>
+            <option value="1 sqcm" ${unit === '1 sqcm' ? 'selected' : ''}>1 sqcm</option>
+            <option value="1 sqm" ${unit === '1 sqm' ? 'selected' : ''}>1 sqm</option>
+            <option value="1 running ft" ${unit === '1 running ft' ? 'selected' : ''}>1 running ft</option>
+            <option value="1 running m" ${unit === '1 running m' ? 'selected' : ''}>1 running m</option>
+            <option value="1 piece" ${unit === '1 piece' ? 'selected' : ''}>1 piece</option>
+          </select>
+        </td>
+        <td><input type="number" name="unitPrice" min="0" step="0.01" value="${prefill.unitPrice || 0}" oninput="recalcRow(this)" required></td>
+        <td><input type="text" name="amount" readonly></td>
+      `;
+      tbody.appendChild(tr);
+      recalcRow(tr.querySelector('input[name="quantity"]'));
+    }
+
+    function recalcRow(el){
+      const tr = el.closest('tr');
+      const qty = parseFloat(tr.querySelector('input[name="quantity"]').value || '0');
+      const price = parseFloat(tr.querySelector('input[name="unitPrice"]').value || '0');
+      tr.querySelector('input[name="amount"]').value = (qty*price).toFixed(2);
+      recalcTotals();
+    }
+
+    function recalcTotals(){
+      const rows = Array.from(document.querySelectorAll('#items-body tr'));
+      let subtotal = 0;
+      rows.forEach(tr => {
+        const qty = parseFloat(tr.querySelector('input[name="quantity"]').value || '0');
+        const price = parseFloat(tr.querySelector('input[name="unitPrice"]').value || '0');
+        subtotal += qty*price;
+      });
+      const sgstP = parseFloat(document.getElementById('sgstPercent').value || '0');
+      const cgstP = parseFloat(document.getElementById('cgstPercent').value || '0');
+      const sgstA = subtotal * sgstP / 100;
+      const cgstA = subtotal * cgstP / 100;
+      const total = subtotal + sgstA + cgstA;
+      document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+      document.getElementById('sgstAmount').textContent = sgstA.toFixed(2);
+      document.getElementById('cgstAmount').textContent = cgstA.toFixed(2);
+      document.getElementById('grandTotal').textContent = total.toFixed(2);
+    }
+
+    async function loadNextQuote(){
+      if (!API_BASE || API_BASE.includes('YOUR_DECORMIND_API_BASE_URL')) return;
+      try{
+        const date = document.getElementById('date').value;
+        const res = await fetch(`${API}/quotation/next?date=${encodeURIComponent(date)}`);
+        if(!res.ok) return;
+        const data = await res.json();
+        if(data.quoteNumber){
+          document.getElementById('quoteNumber').value = data.quoteNumber;
+        }
+      }catch(e){}
+    }
+
+    async function createQuotation(e){
+      e.preventDefault();
+      const status = document.getElementById('status');
+      status.textContent='';
+      status.classList.remove('error');
+      if (!API_BASE || API_BASE.includes('YOUR_DECORMIND_API_BASE_URL')){
+        status.textContent='Please set API_BASE in quotation.html';
+        status.classList.add('error');
+        return;
+      }
+
+      const items = Array.from(document.querySelectorAll('#items-body tr')).map(tr=>{
+        return {
+          description: tr.querySelector('input[name="description"]').value.trim(),
+          hsnCode: tr.querySelector('input[name="hsnCode"]').value.trim(),
+          quantity: parseFloat(tr.querySelector('input[name="quantity"]').value || '0'),
+          unit: tr.querySelector('select[name="unit"]').value,
+          unitPrice: parseFloat(tr.querySelector('input[name="unitPrice"]').value || '0')
+        };
+      }).filter(it=>it.description);
+
+      if(items.length === 0){
+        status.textContent='Add at least one item.';
+        status.classList.add('error');
+        return;
+      }
+
+      const body = {
+        date: document.getElementById('date').value,
+        validUntil: document.getElementById('validUntil').value,
+        customerId: document.getElementById('customerId').value.trim(),
+        customerName: document.getElementById('customerName').value.trim(),
+        customerAddress: document.getElementById('customerAddress').value.trim(),
+        customerPhone: document.getElementById('customerPhone').value.trim(),
+        customerEmail: document.getElementById('customerEmail').value.trim(),
+        descriptionOfWork: document.getElementById('descriptionOfWork').value.trim(),
+        items,
+        sgstPercent: parseFloat(document.getElementById('sgstPercent').value || '0'),
+        cgstPercent: parseFloat(document.getElementById('cgstPercent').value || '0'),
+        terms: document.getElementById('terms').value.trim(),
+        author: document.getElementById('author').value.trim()
+      };
+
+      try{
+        const res = await fetch(`${API}/quotation`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(body)
+        });
+        if(!res.ok){
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const data = await res.json();
+        document.getElementById('quoteNumber').value = data.quoteNumber || '';
+        const dl = document.getElementById('downloadBtn');
+        dl.dataset.quotationId = data.id;
+        dl.disabled = false;
+        status.textContent = `Quotation created. Number: ${data.quoteNumber}`;
+      }catch(err){
+        status.textContent = `Failed: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    async function downloadQuotationPdf(){
+      const status = document.getElementById('status');
+      const btn = document.getElementById('downloadBtn');
+      const id = btn.dataset.quotationId;
+      if(!id){
+        status.textContent='Create a quotation first.';
+        status.classList.add('error');
+        return;
+      }
+      try{
+        const res = await fetch(`${API}/quotation/${id}/pdf`);
+        if(!res.ok){
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `quotation-${document.getElementById('quoteNumber').value || id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }catch(err){
+        status.textContent = `Download failed: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded',()=>{
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth()+1).padStart(2,'0');
+      const dd = String(today.getDate()).padStart(2,'0');
+      document.getElementById('date').value = `${yyyy}-${mm}-${dd}`;
+      addItemRow({});
+      document.getElementById('sgstPercent').value = '0';
+      document.getElementById('cgstPercent').value = '0';
+      recalcTotals();
+      loadNextQuote();
+      document.getElementById('sgstPercent').addEventListener('input',recalcTotals);
+      document.getElementById('cgstPercent').addEventListener('input',recalcTotals);
+      document.getElementById('date').addEventListener('change',loadNextQuote);
+    });
+  </script>
 </head>
 <body>
   <!-- SIDEBAR -->
