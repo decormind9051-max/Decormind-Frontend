@@ -782,8 +782,10 @@ const handleKitchenCarousel = () => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
     if (target.matches('[data-kitchen-quote]')) {
-      const contactSection = document.getElementById('contact');
-      contactSection?.scrollIntoView({ behavior: 'smooth' });
+      if (leadPopup) {
+        leadPopup.classList.add('is-open');
+        leadPopup.setAttribute('aria-hidden', 'false');
+      }
     }
   });
 
@@ -900,8 +902,10 @@ const handleLivingCarousel = () => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
     if (target.matches('[data-living-quote]')) {
-      const contactSection = document.getElementById('contact');
-      contactSection?.scrollIntoView({ behavior: 'smooth' });
+      if (leadPopup) {
+        leadPopup.classList.add('is-open');
+        leadPopup.setAttribute('aria-hidden', 'false');
+      }
     }
   });
 
@@ -1018,8 +1022,10 @@ const handleBedroomCarousel = () => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
     if (target.matches('[data-bedroom-quote]')) {
-      const contactSection = document.getElementById('contact');
-      contactSection?.scrollIntoView({ behavior: 'smooth' });
+      if (leadPopup) {
+        leadPopup.classList.add('is-open');
+        leadPopup.setAttribute('aria-hidden', 'false');
+      }
     }
   });
 
@@ -1136,8 +1142,10 @@ const handleWardrobeCarousel = () => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
     if (target.matches('[data-wardrobe-quote]')) {
-      const contactSection = document.getElementById('contact');
-      contactSection?.scrollIntoView({ behavior: 'smooth' });
+      if (leadPopup) {
+        leadPopup.classList.add('is-open');
+        leadPopup.setAttribute('aria-hidden', 'false');
+      }
     }
   });
 
