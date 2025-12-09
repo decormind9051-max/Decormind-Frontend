@@ -344,6 +344,7 @@ const wardrobeNext = document.querySelector('.wardrobe-nav-next');
 const nav = document.querySelector('.nav');
 const navToggle = document.querySelector('.nav-toggle');
 const drawerClose = document.querySelector('.drawer-close');
+const navCta = document.querySelector('.nav-cta');
 const heroSliders = document.querySelectorAll('[data-hero-slider]');
 const leadPopup = document.getElementById('leadPopup');
 const leadPopupClose = document.getElementById('leadPopupClose');
@@ -1202,6 +1203,14 @@ const handleNavToggle = () => {
     }
   });
 };
+
+// Make the hero "Get Free Estimate" button open the lead popup
+if (navCta && leadPopup) {
+  navCta.addEventListener('click', () => {
+    leadPopup.classList.add('is-open');
+    leadPopup.setAttribute('aria-hidden', 'false');
+  });
+}
 
 renderGallery();
 setYear();
