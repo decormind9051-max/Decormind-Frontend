@@ -6,7 +6,7 @@ const galleryItems = [
     vibe: 'Earthy modern'
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-34f2a212f0c1?auto=format&fit=crop&w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
     title: 'Creative studio',
     location: 'Brooklyn, NY',
     vibe: 'Industrial calm'
@@ -18,7 +18,7 @@ const galleryItems = [
     vibe: 'Soft minimal'
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-34f2a212f0c1?auto=format&fit=crop&w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
     title: 'Wellness suite',
     location: 'Oslo, Norway',
     vibe: 'Nordic spa'
@@ -88,7 +88,7 @@ const wardrobeSlides = [
     subtitle: 'Handle-less shutters for a calm backdrop'
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-34f2a212f0c1?auto=format&fit=crop&w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
     title: 'Loft wardrobe system',
     subtitle: 'Open and closed storage for studio living'
   },
@@ -174,7 +174,7 @@ const bedroomSlides = [
     subtitle: 'Soft lighting and integrated storage'
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-34f2a212f0c1?auto=format&fit=crop&w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
     title: 'City-view bedroom',
     subtitle: 'Full-height drapery and tonal palette'
   },
