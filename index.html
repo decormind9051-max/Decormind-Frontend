@@ -457,26 +457,151 @@
     <div class="lead-popup-backdrop"></div>
     <div class="lead-popup-card" role="dialog" aria-modal="true" aria-labelledby="leadPopupTitle">
       <button class="lead-popup-close" type="button" id="leadPopupClose" aria-label="Close lead form">&times;</button>
-      <div class="lead-popup-header">
-        <h2 id="leadPopupTitle">Designs for every budget</h2>
-        <span class="lead-popup-step">1 / 2</span>
+      <div class="lead-popup-layout">
+        <div class="lead-popup-media" aria-hidden="true">
+          <div class="lead-popup-media-image"></div>
+          <div class="lead-popup-media-copy">
+            <p class="lead-popup-eyebrow">Not sure where to start?</p>
+            <p class="lead-popup-line">Book a quick design call and we will guide you.</p>
+          </div>
+        </div>
+        <div class="lead-popup-content">
+          <div class="lead-popup-header">
+            <h2 id="leadPopupTitle">Designs for every budget</h2>
+          </div>
+          <form id="leadPopupForm" class="lead-popup-form">
+            <div class="lead-popup-phone-group">
+              <div class="lead-popup-flag">
+                <span class="lead-popup-flag-icon" aria-hidden="true"></span>
+                <span class="lead-popup-flag-code">+91</span>
+              </div>
+              <input id="leadPhone" name="leadPhone" type="tel" inputmode="tel" placeholder="Enter your mobile number" aria-label="Mobile number" required />
+            </div>
+            <label class="lead-popup-checkbox">
+              <input type="checkbox" id="leadWhatsapp" name="leadWhatsapp" />
+              <span>Send me updates on WhatsApp</span>
+            </label>
+            <div class="form-group">
+              <label for="leadProperty">Property location</label>
+              <select id="leadProperty" name="leadProperty" required>
+                <option value="" disabled selected>Select your property location</option>
+                <option>Agartala</option>
+                <option>Agra</option>
+                <option>Ahmedabad</option>
+                <option>Ajmer</option>
+                <option>Aligarh</option>
+                <option>Allahabad</option>
+                <option>Amritsar</option>
+                <option>Asansol</option>
+                <option>Aurangabad</option>
+                <option>Bangalore</option>
+                <option>Bareilly</option>
+                <option>Belgaum</option>
+                <option>Bhagalpur</option>
+                <option>Bharatpur</option>
+                <option>Bhavnagar</option>
+                <option>Bhilai</option>
+                <option>Bhilwara</option>
+                <option>Bhopal</option>
+                <option>Bhubaneswar</option>
+                <option>Bikaner</option>
+                <option>Bilaspur</option>
+                <option>Bokaro</option>
+                <option>Chandigarh</option>
+                <option>Chennai</option>
+                <option>Coimbatore</option>
+                <option>Cuttack</option>
+                <option>Dehradun</option>
+                <option>Delhi</option>
+                <option>Dhanbad</option>
+                <option>Dhule</option>
+                <option>Durgapur</option>
+                <option>Faridabad</option>
+                <option>Gandhinagar</option>
+                <option>Ghaziabad</option>
+                <option>Gorakhpur</option>
+                <option>Gulbarga</option>
+                <option>Guntur</option>
+                <option>Gurugram</option>
+                <option>Guwahati</option>
+                <option>Gwalior</option>
+                <option>Hisar</option>
+                <option>Hubballi</option>
+                <option>Hyderabad</option>
+                <option>Imphal</option>
+                <option>Indore</option>
+                <option>Jabalpur</option>
+                <option>Jaipur</option>
+                <option>Jalandhar</option>
+                <option>Jamnagar</option>
+                <option>Jamshedpur</option>
+                <option>Jhansi</option>
+                <option>Jodhpur</option>
+                <option>Jorhat</option>
+                <option>Kanpur</option>
+                <option>Karimnagar</option>
+                <option>Karur</option>
+                <option>Kochi</option>
+                <option>Kolhapur</option>
+                <option>Kolkata</option>
+                <option>Kota</option>
+                <option>Kozhikode</option>
+                <option>Lucknow</option>
+                <option>Ludhiana</option>
+                <option>Madurai</option>
+                <option>Malappuram</option>
+                <option>Mangaluru</option>
+                <option>Meerut</option>
+                <option>Mirzapur</option>
+                <option>Moradabad</option>
+                <option>Mumbai</option>
+                <option>Mysuru</option>
+                <option>Nagpur</option>
+                <option>Nanded</option>
+                <option>Nashik</option>
+                <option>Nellore</option>
+                <option>Noida</option>
+                <option>Patiala</option>
+                <option>Patna</option>
+                <option>Puducherry</option>
+                <option>Pune</option>
+                <option>Raipur</option>
+                <option>Rajahmundry</option>
+                <option>Rajkot</option>
+                <option>Ranchi</option>
+                <option>Rourkela</option>
+                <option>Salem</option>
+                <option>Saharanpur</option>
+                <option>Sangli</option>
+                <option>Satna</option>
+                <option>Secunderabad</option>
+                <option>Shimla</option>
+                <option>Siliguri</option>
+                <option>Solapur</option>
+                <option>Srinagar</option>
+                <option>Surat</option>
+                <option>Thane</option>
+                <option>Thiruvananthapuram</option>
+                <option>Thrissur</option>
+                <option>Tiruchirappalli</option>
+                <option>Tirunelveli</option>
+                <option>Tirupati</option>
+                <option>Udaipur</option>
+                <option>Ujjain</option>
+                <option>Vadodara</option>
+                <option>Varanasi</option>
+                <option>Vasai-Virar</option>
+                <option>Vijayawada</option>
+                <option>Visakhapatnam</option>
+                <option>Warangal</option>
+                <option>Yamunanagar</option>
+              </select>
+            </div>
+            <button type="submit" class="cta primary lead-popup-submit">Book free design session</button>
+            <p class="lead-popup-disclaimer">By submitting this form, you agree to our privacy policy &amp; terms and conditions.</p>
+          </form>
+        </div>
       </div>
-      <form id="leadPopupForm" class="lead-popup-form">
-        <div class="form-group">
-          <label for="leadName">Name</label>
-          <input id="leadName" name="leadName" type="text" required />
-        </div>
-        <div class="form-group">
-          <label for="leadPhone">Mobile number</label>
-          <input id="leadPhone" name="leadPhone" type="tel" required />
-        </div>
-        <label class="lead-popup-checkbox">
-          <input type="checkbox" id="leadWhatsapp" name="leadWhatsapp" />
-          <span>Send me updates on WhatsApp</span>
-        </label>
-        <button type="submit" class="cta primary lead-popup-submit">Next</button>
-        <p class="lead-popup-disclaimer">By submitting this form, you agree to the privacy policy &amp; terms and conditions.</p>
-      </form>
     </div>
   </div>
 

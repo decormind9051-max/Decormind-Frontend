@@ -465,11 +465,11 @@ const initLeadPopup = () => {
     event.preventDefault();
     console.log('[leadPopup] submit handler');
     const formData = new FormData(leadPopupForm);
-    const name = String(formData.get('leadName') || '').trim();
     const phone = String(formData.get('leadPhone') || '').trim();
+    const property = String(formData.get('leadProperty') || '').trim();
 
-    if (!name || !phone) {
-      showToast('Please add your name and mobile number.', true);
+    if (!phone || !property) {
+      showToast('Please add your mobile number and property location.', true);
       return;
     }
 
