@@ -434,14 +434,17 @@ const initLeadPopup = () => {
 
   const STORAGE_KEY = 'decormind_lead_popup_seen';
   const hasSeen = window.localStorage.getItem(STORAGE_KEY);
+  console.log('[leadPopup] initLeadPopup called, hasSeen =', hasSeen);
   if (!hasSeen) {
     setTimeout(() => {
+      console.log('[leadPopup] opening from timer');
       leadPopup.classList.add('is-open');
       leadPopup.setAttribute('aria-hidden', 'false');
     }, 9000);
   }
 
   const closePopup = () => {
+    console.log('[leadPopup] closePopup called');
     leadPopup.classList.remove('is-open');
     leadPopup.setAttribute('aria-hidden', 'true');
     window.localStorage.setItem(STORAGE_KEY, 'true');
@@ -459,6 +462,7 @@ const initLeadPopup = () => {
 
   leadPopupForm.addEventListener('submit', event => {
     event.preventDefault();
+    console.log('[leadPopup] submit handler');
     const formData = new FormData(leadPopupForm);
     const name = String(formData.get('leadName') || '').trim();
     const phone = String(formData.get('leadPhone') || '').trim();
