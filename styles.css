@@ -143,6 +143,10 @@ img {
   gap: 1rem;
 }
 
+.drawer-close {
+  display: none;
+}
+
 .nav-cta {
   position: relative;
   display: inline-flex;
