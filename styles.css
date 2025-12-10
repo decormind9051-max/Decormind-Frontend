@@ -244,6 +244,14 @@ h1 {
   line-height: 1.6;
 }
 
+.hero-subhead-band {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f97316, rgba(251,191,36,0.6));
+  color: #f9fafb;
+}
+
 @media (min-width: 900px) {
   .hero-content .subhead {
     white-space: nowrap;
