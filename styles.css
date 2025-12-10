@@ -172,6 +172,14 @@ img {
   border: 2px solid rgba(255,255,255,0.8);
 }
 
+.logo-text {
+  margin-left: 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
 .nav-links {
   display: flex;
   gap: 1.5rem;
@@ -2375,5 +2383,9 @@ select:focus {
 
   .experience-tabs {
     width: 100%;
+  }
+
+  .logo-text {
+    display: none;
   }
 }
