@@ -74,6 +74,12 @@ img {
   color: rgba(249,250,251,0.9);
 }
 
+/* Ensure hero overlay content sits clearly below the fixed header on full-slider pages */
+.hero-full-slider .hero-overlay {
+  align-items: flex-end;
+  padding: 4.5rem clamp(1.5rem, 5vw, 6rem) 3rem;
+}
+
 .nav {
   display: flex;
   align-items: center;
