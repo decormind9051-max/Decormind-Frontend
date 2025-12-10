@@ -84,6 +84,16 @@ img {
   color: var(--muted);
 }
 
+@media (max-width: 720px) {
+  .hero-legal .hero-overlay {
+    padding: 5rem 1.25rem 2.25rem;
+  }
+
+  .hero-legal .hero-overlay-inner {
+    text-align: center;
+  }
+}
+
 .hero-overlay-inner {
   max-width: 720px;
   text-align: center;
