@@ -60,6 +60,30 @@ img {
   background: linear-gradient(120deg, rgba(15,23,42,0.52), rgba(15,23,42,0.15));
 }
 
+/* Softer hero treatment for legal pages (no dark bar behind the band) */
+.hero-legal .hero-overlay {
+  position: relative;
+  inset: auto;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 5.75rem clamp(1.5rem, 5vw, 6rem) 2.75rem;
+  background: transparent;
+}
+
+.hero-legal .hero-overlay-inner {
+  max-width: 760px;
+  text-align: left;
+  color: var(--text);
+}
+
+.hero-legal .hero-overlay-inner h1 {
+  color: var(--text);
+}
+
+.hero-legal .hero-overlay-inner .subhead {
+  color: var(--muted);
+}
+
 .hero-overlay-inner {
   max-width: 720px;
   text-align: center;
