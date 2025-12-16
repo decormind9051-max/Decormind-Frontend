@@ -384,7 +384,8 @@
         cgstPercent: parseFloat(document.getElementById('cgstPercent').value || '0'),
         discountPercent: parseFloat(document.getElementById('discountPercent').value || '0'),
         terms: document.getElementById('terms').value.trim(),
-        author: document.getElementById('author').value.trim()
+        author: document.getElementById('author').value.trim(),
+        isPaid: document.getElementById('isPaid')?.checked || false
       };
 
       try{
@@ -673,6 +674,12 @@
               <div>
                 <label for="author">Authors Signature (name)</label>
                 <input id="author" type="text">
+              </div>
+              <div style="display:flex; align-items:center; gap:6px; margin-top:18px;">
+                <label for="isPaid" style="display:flex; align-items:center; gap:6px; font-size:13px;">
+                  <input id="isPaid" type="checkbox">
+                  <span>Mark invoice as Paid</span>
+                </label>
               </div>
             </div>
 
