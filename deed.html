@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decormind Deed of Agreement</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+    }
+    #sidebar {
+      width: 260px;
+      background: linear-gradient(135deg, #1f2937, #111827);
+      color: #f9fafb;
+      padding: 1.5rem 1.25rem;
+      box-shadow: 4px 0 18px rgba(15, 23, 42, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    #sidebar .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      color: inherit;
+    }
+    #sidebar .brand .bx { font-size: 1.75rem; color: #facc6b; }
+    #sidebar .side-menu { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    #sidebar .side-menu li a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 999px;
+      color: #e5e7eb;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background 0.18s ease, transform 0.18s ease, color 0.18s ease;
+    }
+    #sidebar .side-menu li a .icon { font-size: 1.2rem; }
+    #sidebar .side-menu li.active a,
+    #sidebar .side-menu li a:hover {
+      background: linear-gradient(135deg, #fbbf24, #f97316);
+      color: #111827;
+      transform: translateX(3px);
+    }
+    #sidebar .side-menu li.active a .icon { color: #111827; }
+
+    #content { flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    #content nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.75rem;
+      background: linear-gradient(90deg, rgba(246,231,218,0.98), rgba(249,242,234,0.98));
+      border-bottom: 1px solid rgba(214,211,209,0.9);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .nav-title { font-size: 0.95rem; font-weight: 500; color: var(--muted); }
+    .nav-pill {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(248, 191, 88, 0.18);
+      font-size: 0.78rem;
+      color: #92400e;
+      font-weight: 500;
+    }
+    .dashboard-main { padding: 1.75rem 1.75rem 2rem; box-sizing: border-box; }
+    .dashboard-card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+      padding: 1.25rem 1.25rem 1rem;
+      border: 1px solid var(--border);
+    }
+    .dashboard-card h2 { margin: 0 0 0.25rem; font-size: 1.2rem; font-weight: 600; letter-spacing: 0.02em; }
+    .dashboard-subtitle { margin: 0 0 0.9rem; font-size: 0.85rem; color: var(--muted); }
+
+    .quote-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background:#fff;
+      border:1px solid #e5e5e5;
+      padding:24px;
+      box-shadow:0 10px 30px rgba(0,0,0,.06);
+      border-radius: 12px;
+    }
+    .quote-grid { display:grid; grid-template-columns:2fr 1.4fr; gap:16px; }
+    .quote-table { width:100%; border-collapse:collapse; }
+    .quote-table th, .quote-table td { border:1px solid #e5e5e5; padding:6px 8px; font-size:13px; }
+    .quote-table th { background:#f4d48a; }
+    .band { background:#f4d48a; padding:6px 10px; font-weight:600; font-size:13px; margin-top:16px; }
+    .cust-band { background:#d9d9d9; padding:6px 10px; font-weight:600; font-size:13px; margin-top:16px; }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:6px 0; }
+    .field-row label { font-size:13px; display:block; margin-bottom:4px; }
+    .field-row input, .field-row textarea { width:100%; padding:6px 8px; font-size:13px; }
+    .actions { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+    .actions button { padding:8px 14px; border:0; background:#2563eb; color:#fff; border-radius:4px; cursor:pointer; font-size:14px; }
+    .actions button.secondary { background:#111827; }
+    .status { margin-top:10px; font-size:13px; color:#065f46; }
+    .status.error { color:#b91c1c; }
+
+    .sidebar-toggle { display:none; border:none; background:transparent; font-size:1.4rem; cursor:pointer; margin-right:0.25rem; }
+    .sidebar-close {
+      display:none;
+      position:absolute;
+      top:0.75rem;
+      right:0.75rem;
+      border:none;
+      background:rgba(15,23,42,0.85);
+      color:#f9fafb;
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      font-size:1.1rem;
+      line-height:1;
+      cursor:pointer;
+      z-index:25;
+    }
+
+    @media (max-width: 768px) {
+      body { flex-direction: row; overflow-x: hidden; }
+      #sidebar {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: 240px;
+        transform: translateX(-100%);
+        transition: transform 0.2s ease-out;
+        z-index: 20;
+      }
+      body.sidebar-open #sidebar { transform: translateX(0); }
+      #content { flex: 1; }
+      #content nav { padding: 0.6rem 0.75rem; }
+      .sidebar-toggle { display:inline-flex; align-items:center; justify-content:center; }
+      .sidebar-close { display:inline-flex; align-items:center; justify-content:center; }
+      .dashboard-main { padding:1rem; }
+      .quote-container { margin:0; padding:16px; border-radius:10px; }
+      .quote-grid { grid-template-columns:1fr; }
+      .field-row { grid-template-columns:1fr; }
+      .actions { flex-direction:column; align-items:stretch; }
+    }
+  </style>
+  <script>
+    const API_BASE = 'https://vzw780l2gg.execute-api.ap-south-1.amazonaws.com';
+    const API = API_BASE.replace(/\/$/, '');
+
+    async function createDeed(e) {
+      e.preventDefault();
+      const status = document.getElementById('status');
+      status.textContent = '';
+      status.classList.remove('error');
+
+      if (!API_BASE || API_BASE.includes('YOUR_DECORMIND_API_BASE_URL')){
+        status.textContent='Please set API_BASE in deed.html';
+        status.classList.add('error');
+        return;
+      }
+
+      const body = {
+        agreementDate: document.getElementById('agreementDate').value,
+        partyAName: document.getElementById('partyAName').value.trim(),
+        partyAAddress: document.getElementById('partyAAddress').value.trim(),
+        projectDescription: document.getElementById('projectDescription').value.trim(),
+        totalAmount: parseFloat(document.getElementById('totalAmount').value || '0'),
+        advanceAmount: parseFloat(document.getElementById('advanceAmount').value || '0'),
+        terms: document.getElementById('terms').value.trim(),
+        author: document.getElementById('author').value.trim(),
+        doaBody: document.getElementById('doaBody').value.trim()
+      };
+
+      if (!body.partyAName || !body.doaBody || !body.totalAmount) {
+        status.textContent = 'Party A name, total amount and DOA text are required.';
+        status.classList.add('error');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/deed`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const data = await res.json(); // { id, deedNumber }
+        document.getElementById('deedNumber').value = data.deedNumber || '';
+        const dl = document.getElementById('downloadBtn');
+        dl.dataset.deedId = data.id;
+        dl.disabled = false;
+        status.textContent = `Deed created. Number: ${data.deedNumber}`;
+      } catch (err) {
+        status.textContent = `Failed: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    async function downloadDeedPdf() {
+      const status = document.getElementById('status');
+      const btn = document.getElementById('downloadBtn');
+      const id = btn.dataset.deedId;
+      if (!id) {
+        status.textContent = 'Create a deed first.';
+        status.classList.add('error');
+        return;
+      }
+      try {
+        const res = await fetch(`${API}/deed/${id}/pdf`);
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const blob = await res.blob();
+        const filename = `deed-${document.getElementById('deedNumber').value || id}.pdf`;
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        status.textContent = `Download failed: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    function setupSidebarToggle(){
+      const btn = document.getElementById('sidebarToggle');
+      const closeBtn = document.getElementById('sidebarClose');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          document.body.classList.toggle('sidebar-open');
+        });
+      }
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          document.body.classList.remove('sidebar-open');
+        });
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      document.getElementById('agreementDate').value = `${yyyy}-${mm}-${dd}`;
+      setupSidebarToggle();
+    });
+  </script>
+</head>
+<body>
+  <section id="sidebar">
+    <button id="sidebarClose" class="sidebar-close" type="button">×</button>
+    <a href="index.html" class="brand">
+      <i class='bx bx-home-heart'></i>
+      <span class="text">Decormind</span>
+    </a>
+    <ul class="side-menu top">
+      <li>
+        <a href="dashboard.html">
+          <i class='bx bx-file icon'></i>
+          <span class="text">Make Quotation</span>
+        </a>
+      </li>
+      <li>
+        <a href="invoice.html">
+          <i class='bx bx-receipt icon'></i>
+          <span class="text">Invoice</span>
+        </a>
+      </li>
+      <li>
+        <a href="client-history.html">
+          <i class='bx bx-user icon'></i>
+          <span class="text">Client History</span>
+        </a>
+      </li>
+      <li class="active">
+        <a href="deed.html">
+          <i class='bx bx-file-find icon'></i>
+          <span class="text">Deed of Agreement</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section id="content">
+    <nav>
+      <div style="display:flex; align-items:center; gap:0.5rem;">
+        <button id="sidebarToggle" class="sidebar-toggle" type="button">☰</button>
+        <div class="nav-title">Deed of Agreement workspace</div>
+      </div>
+      <div class="nav-pill">Decormind · Deed</div>
+    </nav>
+
+    <div class="dashboard-main">
+      <div class="dashboard-card">
+        <h2>Deed of Agreement</h2>
+        <p class="dashboard-subtitle">Create and download a Deed of Agreement using your exact legal wording.</p>
+
+        <div class="quote-container">
+          <h1 style="margin-top:0; font-size:22px;">Deed of Agreement</h1>
+          <p style="font-size:13px; color:#555;">Fill the form and paste your DOA text to generate a Decormind-styled PDF.</p>
+
+          <form onsubmit="createDeed(event)">
+            <div class="quote-grid">
+              <div>
+                <div>
+                  <strong>Decormind</strong><br>
+                  <small>Phone: 9051365052<br>Email: support@decormind.in<br>Website: decormind.in</small>
+                </div>
+              </div>
+              <div>
+                <table class="quote-table">
+                  <tr>
+                    <td>DEED #</td>
+                    <td><input id="deedNumber" type="text" placeholder="Auto" readonly></td>
+                  </tr>
+                  <tr>
+                    <td>AGREEMENT DATE</td>
+                    <td><input id="agreementDate" type="date"></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <div class="cust-band">PARTY A INFO</div>
+            <div class="field-row">
+              <div>
+                <label for="partyAName">Party A Name</label>
+                <input id="partyAName" type="text" required>
+              </div>
+              <div>
+                <label for="partyAAddress">Party A Address</label>
+                <textarea id="partyAAddress" rows="2"></textarea>
+              </div>
+            </div>
+
+            <div class="band">Agreement Details</div>
+            <div class="field-row">
+              <div>
+                <label for="projectDescription">Project / Work Description</label>
+                <textarea id="projectDescription" rows="2"></textarea>
+              </div>
+              <div>
+                <label>Amounts</label>
+                <div class="field-row">
+                  <div>
+                    <label for="totalAmount">Total Amount (₹)</label>
+                    <input id="totalAmount" type="number" step="0.01" min="0" required>
+                  </div>
+                  <div>
+                    <label for="advanceAmount">Advance Amount (₹)</label>
+                    <input id="advanceAmount" type="number" step="0.01" min="0">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="band" style="margin-top:16px;">Full Deed Text</div>
+            <textarea id="doaBody" rows="10" style="width:100%; margin-top:6px;" placeholder="Paste the full Deed of Agreement text here..."></textarea>
+
+            <div class="band" style="margin-top:16px;">Additional Terms &amp; Author</div>
+            <div class="field-row" style="margin-top:6px;">
+              <div>
+                <label for="terms">Extra Terms (optional)</label>
+                <textarea id="terms" rows="3"></textarea>
+              </div>
+              <div>
+                <label for="author">Author's Signature (name)</label>
+                <input id="author" type="text">
+              </div>
+            </div>
+
+            <div class="actions">
+              <button type="submit">Create Deed</button>
+              <button type="button" class="secondary" id="downloadBtn" onclick="downloadDeedPdf()" disabled>Download PDF</button>
+            </div>
+            <div id="status" class="status"></div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</body>
+</html>
