@@ -427,6 +427,7 @@
         const invoiceDate = new Date().toLocaleDateString("en-GB");
         const var1 = encodeURIComponent(descriptionOfWork || 'Invoice');
         const var2 = encodeURIComponent(invoiceDate);
+        alert(`var2 ${var2}`)
         const finalUrl = `https://botclap.com/apinotification/857279106681222/919051365052/decrautil/UTILITY/${customerPhone}/Decormind-Invoice/EAAbVNscUusIBQBBwMLKPd8ZB1jBJQoGbVJ9DBSEquwtCKcQD2ZCZCmKbZCvYCgIONgU9ExyR6YcoPMIfun3HGrvm5vG5dAvRT3if66hN4FBFtP5txAUfZBUwoMd8quiVZCMPsuZCJKnTpKgJRW2ecN342OI38HzZAcCCsYMjGKlDDZAbu8XkF5wZAeD6zBFw3i7ZBSEJAZDZD/932963986559387?mediaURL=${mediaId}&body1=${var1}&body2=${var2}`;
 
         console.log("📨 Final API URL:", finalUrl);
@@ -460,7 +461,7 @@
         const customerPhone = document.getElementById('customerPhone').value.trim();
         const descriptionOfWork = document.getElementById('descriptionOfWork')?.value.trim() || 'Invoice';
         
-        if (customerPhone) {
+        if (customerPhone) { alert(`customerPhone ${customerPhone}`)
           status.textContent = 'Sending invoice to WhatsApp...';
           await uploadPdfToWhatsApp(blob, filename, customerPhone, descriptionOfWork);
           status.textContent = 'Invoice sent to WhatsApp (if number is valid).';
