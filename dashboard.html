@@ -359,7 +359,6 @@
       const unit = prefill.unit || '1 unit';
       tr.innerHTML = `
         <td><input type="text" name="description" placeholder="Item description" value="${prefill.description || ''}" required></td>
-        <td><input type="text" name="hsnCode" placeholder="HSN Code" value="${prefill.hsnCode || ''}"></td>
         <td><input type="number" name="quantity" min="1" step="1" value="${prefill.quantity || 1}" oninput="recalcRow(this)" required></td>
         <td>
           <select name="unit">
@@ -433,7 +432,6 @@
       const items = Array.from(document.querySelectorAll('#items-body tr')).map(tr=>{
         return {
           description: tr.querySelector('input[name="description"]').value.trim(),
-          hsnCode: tr.querySelector('input[name="hsnCode"]').value.trim(),
           quantity: parseFloat(tr.querySelector('input[name="quantity"]').value || '0'),
           unit: tr.querySelector('select[name="unit"]').value,
           unitPrice: parseFloat(tr.querySelector('input[name="unitPrice"]').value || '0')
@@ -697,7 +695,6 @@
                 <thead>
                   <tr>
                     <th>ITEMS</th>
-                    <th>HSN CODE</th>
                     <th>QTY</th>
                     <th>UNIT</th>
                     <th>UNIT PRICE</th>
