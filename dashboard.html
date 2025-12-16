@@ -482,6 +482,32 @@
       }
     }
 
+    async function uploadPdfToWhatsApp(pdfBlob, filename, customerPhone, descriptionOfWork) {
+      try {
+        const formData = new FormData();
+        formData.append('file', pdfBlob, filename);
+        formData.append('PhonenumberID', '932963986559387');
+        formData.append('PermanentAccessToken', 'EAAbVNscUusIBQBBwMLKPd8ZB1jBJQoGbVJ9DBSEquwtCKcQD2ZCZCmKbZCvYCgIONgU9ExyR6YcoPMIfun3HGrvm5vG5dAvRT3if66hN4FBFtP5txAUfZBUwoMd8quiVZCMPsuZCJKnTpKgJRW2ecN342OI38HzZAcCCsYMjGKlDDZAbu8XkF5wZAeD6zBFw3i7ZBSEJAZDZD');
+
+        const uploadRes = await fetch('https://botclap.com/getMediaID', { method: 'POST', body: formData });
+        const result = await uploadRes.json();
+        const mediaId = result['MediaID'];
+        if (!mediaId) throw new Error('Failed to obtain MediaID');
+        
+        const invoiceDate = new Date().toLocaleDateString("en-GB");
+        const var1 = encodeURIComponent(descriptionOfWork);
+        const var2 = encodeURIComponent(invoiceDate);
+        const finalUrl = `https://botclap.com/apinotification/857279106681222/919051365052/tempqoute/UTILITY/${customerPhone}/Decormind-Quotation/EAAbVNscUusIBQBBwMLKPd8ZB1jBJQoGbVJ9DBSEquwtCKcQD2ZCZCmKbZCvYCgIONgU9ExyR6YcoPMIfun3HGrvm5vG5dAvRT3if66hN4FBFtP5txAUfZBUwoMd8quiVZCMPsuZCJKnTpKgJRW2ecN342OI38HzZAcCCsYMjGKlDDZAbu8XkF5wZAeD6zBFw3i7ZBSEJAZDZD/932963986559387?mediaURL=${mediaId}&body1=${var1}&body2=${var2}`;
+
+        console.log("📨 Final API URL:", finalUrl);
+        const response = await fetch(finalUrl);
+        return true;
+      } catch (e) {
+        console.error('WhatsApp send failed:', e);
+        return false;
+      }
+    }
+
     async function downloadQuotationPdf(){
       const status = document.getElementById('status');
       const btn = document.getElementById('downloadBtn');
@@ -498,10 +524,23 @@
           throw new Error(t);
         }
         const blob = await res.blob();
+        const filename = `quotation-${document.getElementById('quoteNumber').value || id}.pdf`;
+        
+        // Send to WhatsApp if customer phone is provided
+        const customerPhone = document.getElementById('customerPhone').value.trim();
+        const descriptionOfWork = document.getElementById('descriptionOfWork').value.trim();
+        
+        if (customerPhone) {
+          status.textContent = 'Sending quotation to WhatsApp...';
+          await uploadPdfToWhatsApp(blob, filename, customerPhone, descriptionOfWork);
+          status.textContent = 'Quotation sent to WhatsApp (if number is valid).';
+        }
+        
+        // Download the PDF
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `quotation-${document.getElementById('quoteNumber').value || id}.pdf`;
+        a.download = filename;
         document.body.appendChild(a);
         a.click();
         a.remove();
