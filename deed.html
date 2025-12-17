@@ -179,6 +179,7 @@
         agreementDate: document.getElementById('agreementDate').value,
         partyAName: document.getElementById('partyAName').value.trim(),
         partyAAddress: document.getElementById('partyAAddress').value.trim(),
+        partyAPhone: document.getElementById('partyAPhone').value.trim(),
         projectDescription: document.getElementById('projectDescription').value.trim(),
         totalAmount: parseFloat(document.getElementById('totalAmount').value || '0'),
         advanceAmount: parseFloat(document.getElementById('advanceAmount').value || '0'),
@@ -353,6 +354,12 @@
                 <label for="partyAName">Party A Name</label>
                 <input id="partyAName" type="text" required>
               </div>
+              <div>
+                <label for="partyAPhone">Party A Phone</label>
+                <input id="partyAPhone" type="tel" placeholder="Phone number">
+              </div>
+            </div>
+            <div class="field-row">
               <div>
                 <label for="partyAAddress">Party A Address</label>
                 <textarea id="partyAAddress" rows="2"></textarea>
