@@ -48,52 +48,52 @@ const happyHomesSlides = [
 
 const wardrobeSlides = [
   {
-    image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Built-in sliding wardrobe.jpg',
     title: 'Built-in sliding wardrobe',
     subtitle: 'Full-height shutters with soft neutral finishes'
   },
   {
-    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Compact bedroom wardrobe.jpg',
     title: 'Compact bedroom wardrobe',
     subtitle: 'Smart vertical storage for tight footprints'
   },
   {
-    image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Open niche wardrobe.jpg',
     title: 'Open niche wardrobe',
     subtitle: 'Integrated shelving with soft lighting'
   },
   {
-    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Suite walk-in wardrobe.jpeg',
     title: 'Suite walk-in wardrobe',
     subtitle: 'Island dresser and perimeter hanging zones'
   },
   {
-    image: 'https://images.unsplash.com/photo-1493663666135-9d5f5b2e1c79?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Textured panel wardrobe.jpeg',
     title: 'Textured panel wardrobe',
     subtitle: 'Grooved shutters with concealed handles'
   },
   {
-    image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Work-from-home wardrobe wall.jpg',
     title: 'Work-from-home wardrobe wall',
     subtitle: 'Wardrobe plus concealed study nook'
   },
   {
-    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80&sat=-10',
+    image: './assets/Glass-front display wardrobe.jpg',
     title: 'Glass-front display wardrobe',
     subtitle: 'Curated pieces behind softly lit glass'
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Minimal white wardrobe.jpg',
     title: 'Minimal white wardrobe',
     subtitle: 'Handle-less shutters for a calm backdrop'
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Loft wardrobe system.jpg',
     title: 'Loft wardrobe system',
     subtitle: 'Open and closed storage for studio living'
   },
   {
-    image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Apartment entry wardrobe.jpeg',
     title: 'Apartment entry wardrobe',
     subtitle: 'Slim wardrobe with integrated bench'
   }
