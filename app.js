@@ -217,64 +217,58 @@ const bedroomSlides = [
 
 const kitchenSlides = [
   {
-    image: 'https://images.unsplash.com/photo-1556909114-14c0b3e411b9?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Sleek handle-less kitchen.jpg',
     title: 'Sleek handle-less kitchen',
     subtitle: 'Glossy white with warm timber island',
     meta: ['Ideal for 2-3 member families', 'Straight + island layout', 'Integrated lighting']
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=80',
+    image: './assets/Parallel modular kitchen.jpg',
     title: 'Parallel modular kitchen',
     subtitle: 'Optimized storage for compact apartments',
     meta: ['Parallel layout', 'Tall pantry units', 'Soft-close hardware']
   },
   {
-    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80',
+    image: './assets/U-shaped entertainer kitchen.jpg',
     title: 'U-shaped entertainer kitchen',
     subtitle: 'Zoned for prep, cooking, and hosting',
     meta: ['U-shaped layout', 'Breakfast counter', 'Hidden appliances']
   },
   {
-    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=900&q=80',
+    image: './assets/warm wooden kitchen.jpg',
     title: 'Warm wood & stone kitchen',
     subtitle: 'Textured finishes with island seating',
     meta: ['L-shaped layout', 'Quartz countertop', 'Under-cabinet lighting']
   },
   {
-    image: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Studio-friendly modular kitchen.webp',
     title: 'Studio-friendly modular kitchen',
     subtitle: 'Compact yet high-storage cabinetry',
     meta: ['Single-wall layout', 'Loft storage', 'Built-in chimney']
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=80',
+    image: './assets/Open-plan family kitchen.jpg',
     title: 'Open-plan family kitchen',
     subtitle: 'Island dining for everyday hosting',
     meta: ['Island seating', 'Child-friendly finishes', 'Task + ambient lighting']
   },
   {
-    image: 'https://images.unsplash.com/photo-1617099390840-9d2c6c5daa89?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Compact corner kitchen.jpg',
     title: 'Compact corner kitchen',
     subtitle: 'Smart storage in every inch',
     meta: ['Corner carousel units', 'Overhead cabinets', 'Dedicated appliance zone']
   },
   {
-    image: 'https://images.unsplash.com/photo-1617099390840-9d2c6c5daa89?auto=format&fit=crop&w=1200&q=80',
+    image: './assets/Matte grey gourmet kitchen.jpg',
     title: 'Matte grey gourmet kitchen',
     subtitle: 'Understated palette with luxe details',
     meta: ['Matte finishes', 'Integrated hob & chimney', 'Deep drawers']
   },
   {
-    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80',
+    image: './assets/Two-tone modular kitchen.jpg',
     title: 'Two-tone modular kitchen',
     subtitle: 'Upper light, lower deep tones for balance',
     meta: ['Two-tone cabinetry', 'Profile handles', 'Built-in oven tower']
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1556909114-14c0b3e411b9?auto=format&fit=crop&w=1200&q=80',
-    title: 'Minimal all-white kitchen',
-    subtitle: 'Clean lines with hidden storage',
-    meta: ['Handle-less shutters', 'Integrated refrigerator', 'Hidden utility zone']
   }
 ];
 
