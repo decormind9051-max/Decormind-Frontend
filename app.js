@@ -164,52 +164,52 @@ const livingSlides = [
 
 const bedroomSlides = [
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Calm neutral bedroom.jpg',
     title: 'Calm neutral bedroom',
     subtitle: 'Layered linens and warm timber headboard'
   },
   {
-    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Soft pastel bedroom.png',
     title: 'Suite-style master',
     subtitle: 'Soft lighting and integrated storage'
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Monochrome bedroom.jpeg',
     title: 'City-view bedroom',
     subtitle: 'Full-height drapery and tonal palette'
   },
   {
-    image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Compact guest bedroom.png',
     title: 'Minimal platform bed',
     subtitle: 'Low profile bed with sculptural lighting'
   },
   {
-    image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Calm neutral bedroom.jpg',
     title: 'Work & rest suite',
     subtitle: 'Bedroom with a quiet work corner'
   },
   {
-    image: 'https://images.unsplash.com/photo-1519710881301-25c39c3c0743?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Soft pastel bedroom.png',
     title: 'Soft pastel bedroom',
     subtitle: 'Pastel tones and soft curves'
   },
   {
-    image: 'https://images.unsplash.com/photo-1493663666135-9d5f5b2e1c79?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Monochrome bedroom.jpeg',
     title: 'Textured retreat',
     subtitle: 'Wall panelling and layered fabrics'
   },
   {
-    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Compact guest bedroom.png',
     title: 'Compact guest bedroom',
     subtitle: 'Smart storage in a small footprint'
   },
   {
-    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=900&q=80&sat=-20',
+    image: './assets/Monochrome bedroom.jpeg',
     title: 'Monochrome bedroom',
     subtitle: 'Tonal layers with high comfort'
   },
   {
-    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80&sat=-15',
+    image: './assets/Calm neutral bedroom.jpg',
     title: 'Earthy calm suite',
     subtitle: 'Stone, timber, and linen textures'
   }
