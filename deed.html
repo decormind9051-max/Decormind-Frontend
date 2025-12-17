@@ -216,6 +216,32 @@
       }
     }
 
+    async function uploadPdfToWhatsApp(pdfBlob, filename, partyAPhone, projectDescription) {
+      try {
+        const formData = new FormData();
+        formData.append('file', pdfBlob, filename);
+        formData.append('PhonenumberID', '932963986559387');
+        formData.append('PermanentAccessToken', 'EAAbVNscUusIBQBBwMLKPd8ZB1jBJQoGbVJ9DBSEquwtCKcQD2ZCZCmKbZCvYCgIONgU9ExyR6YcoPMIfun3HGrvm5vG5dAvRT3if66hN4FBFtP5txAUfZBUwoMd8quiVZCMPsuZCJKnTpKgJRW2ecN342OI38HzZAcCCsYMjGKlDDZAbu8XkF5wZAeD6zBFw3i7ZBSEJAZDZD');
+
+        const uploadRes = await fetch('https://botclap.com/getMediaID', { method: 'POST', body: formData });
+        const result = await uploadRes.json();
+        const mediaId = result['MediaID'];
+        if (!mediaId) throw new Error('Failed to obtain MediaID');
+
+        const deedDate = new Date().toLocaleDateString('en-GB');
+        const var1 = encodeURIComponent(projectDescription || 'Deed of Agreement');
+        const var2 = encodeURIComponent(deedDate);
+        const finalUrl = `https://botclap.com/apinotification/857279106681222/919051365052/decoutility/UTILITY/${partyAPhone}/Decormind-Deed/EAAbVNscUusIBQBBwMLKPd8ZB1jBJQoGbVJ9DBSEquwtCKcQD2ZCZCmKbZCvYCgIONgU9ExyR6YcoPMIfun3HGrvm5vG5dAvRT3if66hN4FBFtP5txAUfZBUwoMd8quiVZCMPsuZCJKnTpKgJRW2ecN342OI38HzZAcCCsYMjGKlDDZAbu8XkF5wZAeD6zBFw3i7ZBSEJAZDZD/932963986559387?mediaURL=${mediaId}&body1=${var1}&body2=${var2}`;
+
+        console.log('📨 Deed WhatsApp API URL:', finalUrl);
+        await fetch(finalUrl);
+        return true;
+      } catch (e) {
+        console.error('Deed WhatsApp send failed:', e);
+        return false;
+      }
+    }
+
     async function downloadDeedPdf() {
       const status = document.getElementById('status');
       const btn = document.getElementById('downloadBtn');
@@ -233,6 +259,15 @@
         }
         const blob = await res.blob();
         const filename = `deed-${document.getElementById('deedNumber').value || id}.pdf`;
+
+        const partyAPhone = document.getElementById('partyAPhone').value.trim();
+        const projectDescription = document.getElementById('projectDescription').value.trim();
+
+        if (partyAPhone) {
+          status.textContent = 'Sending deed to WhatsApp...';
+          await uploadPdfToWhatsApp(blob, filename, partyAPhone, projectDescription);
+          status.textContent = 'Deed sent to WhatsApp (if number is valid).';
+        }
 
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
