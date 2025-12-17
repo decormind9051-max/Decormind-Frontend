@@ -101,61 +101,61 @@ const wardrobeSlides = [
 
 const livingSlides = [
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Soft neutral living room.jpg',
     title: 'Soft neutral living room',
     subtitle: 'Layered textures with warm wood and linen',
     meta: ['Open-plan layout', 'Family-friendly fabrics', 'Hidden storage']
   },
   {
-    image: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Soft neutral living room.jpg',
     title: 'Sunlit city lounge',
     subtitle: 'Floor-to-ceiling windows with low seating',
     meta: ['City views', 'Low-profile sofa', 'Accent lighting']
   },
   {
-    image: 'https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Indoor-outdoor living.jpg',
     title: 'Indoor-outdoor living',
     subtitle: 'Lounge that flows into a garden deck',
     meta: ['Sliding doors', 'Outdoor fabrics', 'Green accents']
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=900&q=80&sat=-10',
+    image: './assets/Soft neutral living room.jpg',
     title: 'Minimal gallery room',
     subtitle: 'Art-led space with sculptural lighting',
     meta: ['Gallery wall', 'Statement lighting', 'Neutral palette']
   },
   {
-    image: 'https://images.unsplash.com/photo-1505691791990-35cb85b0811e?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Indoor-outdoor living.jpg',
     title: 'Cozy corner lounge',
     subtitle: 'Compact nook with built-in seating',
     meta: ['Corner seating', 'Reading lights', 'Storage bench']
   },
   {
-    image: 'https://images.unsplash.com/photo-1502673530728-f79b4cab31b1?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Soft neutral living room.jpg',
     title: 'Statement sofa living',
     subtitle: 'Bold centerpiece sofa with soft accents',
     meta: ['Accent color', 'Textured rug', 'Layered cushions']
   },
   {
-    image: 'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Indoor-outdoor living.jpg',
     title: 'Work-from-home lounge',
     subtitle: 'Integrated desk within living zone',
     meta: ['Hybrid space', 'Built-in desk', 'Cable management']
   },
   {
-    image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Soft neutral living room.jpg',
     title: 'Warm modern apartment',
     subtitle: 'Soft woods and layered lighting in a compact flat',
     meta: ['Apartment layout', 'Wall-mounted storage', 'Zoned lighting']
   },
   {
-    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=900&q=80&sat=-15',
+    image: './assets/Indoor-outdoor living.jpg',
     title: 'Monochrome lounge',
     subtitle: 'Calm, tonal palette for focused relaxation',
     meta: ['Monochrome palette', 'Curated decor', 'Low contrast']
   },
   {
-    image: 'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?auto=format&fit=crop&w=900&q=80',
+    image: './assets/Earthy retreat living.jpeg',
     title: 'Earthy retreat living',
     subtitle: 'Stone, timber, and linen for a grounded feel',
     meta: ['Earthy textures', 'Natural light', 'Layered textiles']
