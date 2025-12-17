@@ -339,6 +339,7 @@
     const API = API_BASE.replace(/\/$/, '');
     let invoiceItemsCache = [];
     let quotationItemsCache = [];
+    let deedItemsCache = [];
     let sortField = 'date'; // 'date' or 'name'
     let sortOrder = 'desc'; // 'desc' or 'asc'
     let clientFilter = '';
@@ -544,34 +545,148 @@
       }
     }
 
-    function setActiveTab(tab) {
-      const invoiceTab = document.getElementById('tab-invoices');
-      const quotationTab = document.getElementById('tab-quotations');
-      const invoiceSection = document.getElementById('invoice-history-section');
-      const quotationSection = document.getElementById('quotation-history-section');
+    function renderDeeds() {
+      const tbody = document.getElementById('deed-history-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
       const status = document.getElementById('status');
       status.textContent = '';
       status.classList.remove('error');
 
+      const filtered = Array.isArray(deedItemsCache)
+        ? deedItemsCache.filter((d) => {
+            if (!clientFilter) return true;
+            const name = (d.partyAName || '').toLowerCase();
+            return name.includes(clientFilter);
+          })
+        : [];
+
+      if (filtered.length === 0) {
+        status.textContent = 'No deeds found.';
+        return;
+      }
+
+      const items = filtered.sort((a, b) => {
+        if (sortField === 'name') {
+          const na = (a.partyAName || '').toLowerCase();
+          const nb = (b.partyAName || '').toLowerCase();
+          if (na < nb) return sortOrder === 'asc' ? -1 : 1;
+          if (na > nb) return sortOrder === 'asc' ? 1 : -1;
+          return 0;
+        } else {
+          const da = a.agreementDate ? new Date(a.agreementDate).getTime() : 0;
+          const db = b.agreementDate ? new Date(b.agreementDate).getTime() : 0;
+          return sortOrder === 'desc' ? db - da : da - db;
+        }
+      });
+
+      items.forEach((d) => {
+        const tr = document.createElement('tr');
+        const deedNo = d.deedNumber || '';
+        const dateStr = d.agreementDate ? new Date(d.agreementDate).toLocaleDateString('en-IN') : '';
+        const total = typeof d.totalAmount === 'number' ? d.totalAmount.toFixed(2) : '';
+
+        tr.innerHTML = `
+          <td>${deedNo}</td>
+          <td>${dateStr}</td>
+          <td>${d.partyAName || ''}</td>
+          <td style="text-align:right;">₹ ${total}</td>
+          <td class="history-actions">
+            <button type="button" onclick="downloadDeed('${d._id}')">Download</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function loadDeeds() {
+      const status = document.getElementById('status');
+      status.textContent = '';
+      status.classList.remove('error');
+
+      try {
+        const res = await fetch(`${API}/deeds`);
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const data = await res.json();
+        deedItemsCache = Array.isArray(data.items) ? data.items : [];
+        renderDeeds();
+      } catch (err) {
+        status.textContent = `Failed to load deeds: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    async function downloadDeed(id) {
+      const status = document.getElementById('status');
+      status.textContent = '';
+      status.classList.remove('error');
+
+      if (!id) return;
+      try {
+        const res = await fetch(`${API}/deed/${id}/pdf`);
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `deed-${id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        status.textContent = `Download failed: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
+    function setActiveTab(tab) {
+      const invoiceTab = document.getElementById('tab-invoices');
+      const quotationTab = document.getElementById('tab-quotations');
+      const deedTab = document.getElementById('tab-deeds');
+      const invoiceSection = document.getElementById('invoice-history-section');
+      const quotationSection = document.getElementById('quotation-history-section');
+      const deedSection = document.getElementById('deed-history-section');
+      const status = document.getElementById('status');
+      status.textContent = '';
+      status.classList.remove('error');
+
+      invoiceTab.classList.remove('active');
+      quotationTab.classList.remove('active');
+      if (deedTab) deedTab.classList.remove('active');
+      invoiceSection.style.display = 'none';
+      quotationSection.style.display = 'none';
+      if (deedSection) deedSection.style.display = 'none';
+
       if (tab === 'invoices') {
         invoiceTab.classList.add('active');
-        quotationTab.classList.remove('active');
         invoiceSection.style.display = '';
-        quotationSection.style.display = 'none';
         loadInvoices();
-      } else {
-        invoiceTab.classList.remove('active');
+      } else if (tab === 'quotations') {
         quotationTab.classList.add('active');
-        invoiceSection.style.display = 'none';
         quotationSection.style.display = '';
         loadQuotations();
+      } else if (tab === 'deeds' && deedTab && deedSection) {
+        deedTab.classList.add('active');
+        deedSection.style.display = '';
+        loadDeeds();
       }
     }
 
     function onSortFieldChange(value) {
       sortField = value === 'name' ? 'name' : 'date';
       const invoiceSection = document.getElementById('invoice-history-section');
-      if (invoiceSection.style.display === 'none') {
+      const quotationSection = document.getElementById('quotation-history-section');
+      const deedSection = document.getElementById('deed-history-section');
+      if (deedSection && deedSection.style.display !== 'none') {
+        renderDeeds();
+      } else if (quotationSection.style.display !== 'none') {
         renderQuotations();
       } else {
         renderInvoices();
@@ -581,7 +696,11 @@
     function onSortOrderChange(value) {
       sortOrder = value === 'asc' ? 'asc' : 'desc';
       const invoiceSection = document.getElementById('invoice-history-section');
-      if (invoiceSection.style.display === 'none') {
+      const quotationSection = document.getElementById('quotation-history-section');
+      const deedSection = document.getElementById('deed-history-section');
+      if (deedSection && deedSection.style.display !== 'none') {
+        renderDeeds();
+      } else if (quotationSection.style.display !== 'none') {
         renderQuotations();
       } else {
         renderInvoices();
@@ -591,7 +710,11 @@
     function onClientFilterChange(value) {
       clientFilter = (value || '').toLowerCase();
       const invoiceSection = document.getElementById('invoice-history-section');
-      if (invoiceSection.style.display === 'none') {
+      const quotationSection = document.getElementById('quotation-history-section');
+      const deedSection = document.getElementById('deed-history-section');
+      if (deedSection && deedSection.style.display !== 'none') {
+        renderDeeds();
+      } else if (quotationSection.style.display !== 'none') {
         renderQuotations();
       } else {
         renderInvoices();
@@ -640,6 +763,12 @@
           <span class="text">Invoice</span>
         </a>
       </li>
+      <li>
+        <a href="deed.html">
+          <i class="bx bx-file-find icon"></i>
+          <span class="text">Deed of Agreement</span>
+        </a>
+      </li>
       <li class="active">
         <a href="client-history.html">
           <i class='bx bx-user icon'></i>
@@ -668,6 +797,7 @@
           <div class="history-tabs">
             <button id="tab-invoices" class="history-tab active" type="button" onclick="setActiveTab('invoices')">Invoices</button>
             <button id="tab-quotations" class="history-tab" type="button" onclick="setActiveTab('quotations')">Quotations</button>
+            <button id="tab-deeds" class="history-tab" type="button" onclick="setActiveTab('deeds')">Deeds</button>
           </div>
           <div class="history-controls">
             <label for="client-filter">Client name:
@@ -715,6 +845,21 @@
               </tr>
             </thead>
             <tbody id="quotation-history-body"></tbody>
+          </table>
+        </div>
+
+        <div id="deed-history-section" class="history-table-wrapper" style="display:none;">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Deed #</th>
+                <th>Date</th>
+                <th>Party A Name</th>
+                <th>Total Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="deed-history-body"></tbody>
           </table>
         </div>
 
