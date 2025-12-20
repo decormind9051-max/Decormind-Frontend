@@ -455,7 +455,7 @@ const initLeadPopup = () => {
     }
   });
 
-  leadPopupForm.addEventListener('submit', event => {
+  leadPopupForm.addEventListener('submit', async event => {
     event.preventDefault();
     console.log('[leadPopup] submit handler');
     const formData = new FormData(leadPopupForm);
@@ -467,11 +467,30 @@ const initLeadPopup = () => {
       return;
     }
 
+    try {
+      await fetch('https://botclap.com/webhook/contact/857279106681222', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          Name: '',
+          PhoneNumber: phone,
+          ContactList: [],
+          Tags: [],
+          CustomAttributes: {
+            PropertyLocation: property
+          }
+        })
+      });
+    } catch (error) {
+      console.error('[leadPopup] Botclap submission failed', error);
+    }
+
     closePopup();
     showToast('Thanks! Our designer will connect with you shortly.');
   });
 };
-
 const enhanceServiceCards = () => {
   const cards = document.querySelectorAll('[data-service]');
   if (!cards.length) return;
