@@ -69,9 +69,18 @@
         </td>
         <td><input type="number" name="unitPrice" min="0" step="0.01" value="${prefill.unitPrice || 0}" oninput="recalcRow(this)" required></td>
         <td><input type="text" name="amount" readonly></td>
+        <td><button type="button" onclick="removeItemRow(this)" aria-label="Remove row">✕</button></td>
       `;
       tbody.appendChild(tr);
       recalcRow(tr.querySelector('input[name="quantity"]'));
+    }
+
+    function removeItemRow(btn){
+      const tr = btn.closest('tr');
+      if(tr){
+        tr.remove();
+        recalcTotals();
+      }
     }
 
     function recalcRow(el){
