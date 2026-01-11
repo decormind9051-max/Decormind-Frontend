@@ -209,7 +209,10 @@
         const dl = document.getElementById('downloadBtn');
         dl.dataset.deedId = data.id;
         dl.disabled = false;
-        status.textContent = `Deed created. Number: ${data.deedNumber}`;
+        status.textContent = `Deed created. Number: ${data.deedNumber}. Downloading PDF...`;
+
+        // After creating the deed, automatically download the PDF locally
+        await downloadDeedPdfLocal();
       } catch (err) {
         status.textContent = `Failed: ${err.message || err}`;
         status.classList.add('error');
@@ -242,6 +245,39 @@
       }
     }
 
+    // Helper: download the deed PDF locally (no WhatsApp)
+    async function downloadDeedPdfLocal() {
+      const status = document.getElementById('status');
+      const btn = document.getElementById('downloadBtn');
+      const id = btn.dataset.deedId;
+      if (!id) {
+        status.textContent = 'Create a deed first.';
+        status.classList.add('error');
+        return;
+      }
+      try {
+        const res = await fetch(`${API}/deed/${id}/pdf`);
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const blob = await res.blob();
+        const filename = `deed-${document.getElementById('deedNumber').value || id}.pdf`;
+        // Download the PDF locally
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        status.textContent = `Download failed: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
     async function downloadDeedPdf() {
       const status = document.getElementById('status');
       const btn = document.getElementById('downloadBtn');
@@ -260,23 +296,25 @@
         const blob = await res.blob();
         const filename = `deed-${document.getElementById('deedNumber').value || id}.pdf`;
 
+        // Send to WhatsApp ONLY (no local download from this button)
         const partyAPhone = document.getElementById('partyAPhone').value.trim();
         const projectDescription = document.getElementById('projectDescription').value.trim();
 
-        if (partyAPhone) {
-          status.textContent = 'Sending deed to WhatsApp...';
-          await uploadPdfToWhatsApp(blob, filename, partyAPhone, projectDescription);
-          status.textContent = 'Deed sent to WhatsApp (if number is valid).';
+        if (!partyAPhone) {
+          status.textContent = 'Enter Party A phone number to send on WhatsApp.';
+          status.classList.add('error');
+          return;
         }
 
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
+        status.textContent = 'Sending deed to WhatsApp...';
+        const ok = await uploadPdfToWhatsApp(blob, filename, partyAPhone, projectDescription);
+        if (ok) {
+          status.textContent = 'Deed sent to WhatsApp (if number is valid).';
+          status.classList.remove('error');
+        } else {
+          status.textContent = 'Failed to send deed to WhatsApp.';
+          status.classList.add('error');
+        }
       } catch (err) {
         status.textContent = `Download failed: ${err.message || err}`;
         status.classList.add('error');
@@ -439,7 +477,7 @@
 
             <div class="actions">
               <button type="submit">Create Deed</button>
-              <button type="button" class="secondary" id="downloadBtn" onclick="downloadDeedPdf()" disabled>Download PDF</button>
+              <button type="button" class="secondary" id="downloadBtn" onclick="downloadDeedPdf()" disabled>Send to WhatsApp</button>
             </div>
             <div id="status" class="status"></div>
           </form>
