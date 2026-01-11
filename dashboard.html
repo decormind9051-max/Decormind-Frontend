@@ -406,13 +406,19 @@
       });
       const sgstP = parseFloat(document.getElementById('sgstPercent').value || '0');
       const cgstP = parseFloat(document.getElementById('cgstPercent').value || '0');
+      const discountP = parseFloat(document.getElementById('discountPercent').value || '0');
+
       const sgstA = subtotal * sgstP / 100;
       const cgstA = subtotal * cgstP / 100;
-      const total = subtotal + sgstA + cgstA;
+      const grossTotal = subtotal + sgstA + cgstA;
+      const discountAmount = grossTotal * discountP / 100;
+      const netTotal = grossTotal - discountAmount;
+
       document.getElementById('subtotal').textContent = subtotal.toFixed(2);
       document.getElementById('sgstAmount').textContent = sgstA.toFixed(2);
       document.getElementById('cgstAmount').textContent = cgstA.toFixed(2);
-      document.getElementById('grandTotal').textContent = total.toFixed(2);
+      document.getElementById('discountAmount').textContent = discountAmount.toFixed(2);
+      document.getElementById('grandTotal').textContent = netTotal.toFixed(2);
     }
 
     async function loadNextQuote(){
@@ -464,6 +470,7 @@
         items,
         sgstPercent: parseFloat(document.getElementById('sgstPercent').value || '0'),
         cgstPercent: parseFloat(document.getElementById('cgstPercent').value || '0'),
+        discountPercent: parseFloat(document.getElementById('discountPercent').value || '0'),
         terms: document.getElementById('terms').value.trim(),
         author: document.getElementById('author').value.trim()
       };
@@ -619,10 +626,12 @@
       addItemRow({});
       document.getElementById('sgstPercent').value = '0';
       document.getElementById('cgstPercent').value = '0';
+      document.getElementById('discountPercent').value = '0';
       recalcTotals();
       loadNextQuote();
       document.getElementById('sgstPercent').addEventListener('input',recalcTotals);
       document.getElementById('cgstPercent').addEventListener('input',recalcTotals);
+      document.getElementById('discountPercent').addEventListener('input',recalcTotals);
       document.getElementById('date').addEventListener('change',loadNextQuote);
       setupSidebarToggle();
     });
@@ -761,7 +770,7 @@
 
             <div class="field-row" style="margin-top:16px; align-items:flex-start;">
               <div>
-                <label>Taxes</label>
+                <label>Taxes &amp; Discount</label>
                 <div class="field-row">
                   <div>
                     <label for="sgstPercent">SGST %</label>
@@ -772,6 +781,12 @@
                     <input id="cgstPercent" type="number" step="0.01" min="0">
                   </div>
                 </div>
+                <div class="field-row" style="margin-top:6px;">
+                  <div>
+                    <label for="discountPercent">Discount %</label>
+                    <input id="discountPercent" type="number" step="0.01" min="0">
+                  </div>
+                </div>
               </div>
               <div>
                 <label>Totals</label>
@@ -779,6 +794,7 @@
                   <tr><td>SUBTOTAL</td><td style="text-align:right;">₹ <span id="subtotal">0.00</span></td></tr>
                   <tr><td>SGST</td><td style="text-align:right;">₹ <span id="sgstAmount">0.00</span></td></tr>
                   <tr><td>CGST</td><td style="text-align:right;">₹ <span id="cgstAmount">0.00</span></td></tr>
+                  <tr><td>DISCOUNT</td><td style="text-align:right;">₹ <span id="discountAmount">0.00</span></td></tr>
                   <tr><td><strong>TOTAL</strong></td><td style="text-align:right;"><strong>₹ <span id="grandTotal">0.00</span></strong></td></tr>
                 </table>
               </div>
