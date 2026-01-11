@@ -416,7 +416,10 @@
         const dl = document.getElementById('downloadBtn');
         dl.dataset.invoiceId = data.id; // store invoice id for PDF download
         dl.disabled = false;
-        status.textContent = `Invoice created. Number: ${displayInv}`;
+        status.textContent = `Invoice created. Number: ${displayInv}. Downloading PDF...`;
+
+        // After creating the invoice, automatically download the PDF locally
+        await downloadInvoicePdfLocal();
       }catch(err){
         status.textContent = `Failed: ${err.message || err}`;
         status.classList.add('error');
@@ -450,6 +453,40 @@
       }
     }
 
+    // Helper: download the invoice PDF locally (no WhatsApp)
+    async function downloadInvoicePdfLocal(){
+      const status = document.getElementById('status');
+      const btn = document.getElementById('downloadBtn');
+      const id = btn.dataset.invoiceId; // use invoice id, not quotation id
+      if(!id){
+        status.textContent='Create an invoice first.';
+        status.classList.add('error');
+        return;
+      }
+      try{
+        const res = await fetch(`${API}/invoice/${id}/pdf`);
+        if(!res.ok){
+          const t = await res.text();
+          throw new Error(t);
+        }
+        const blob = await res.blob();
+        const filename = `invoice-${document.getElementById('invoiceNumber').value || id}.pdf`;
+
+        // Download the PDF locally
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }catch(err){
+        status.textContent = `Download failed: ${err.message || err}`;
+        status.classList.add('error');
+      }
+    }
+
     async function downloadInvoicePdf(){
       const status = document.getElementById('status');
       const btn = document.getElementById('downloadBtn');
@@ -467,26 +504,26 @@
         }
         const blob = await res.blob();
         const filename = `invoice-${document.getElementById('invoiceNumber').value || id}.pdf`;
-        
-        // Send to WhatsApp if customer phone is provided
+
+        // Send to WhatsApp ONLY (no local download from this button)
         const customerPhone = document.getElementById('customerPhone').value.trim();
         const descriptionOfWork = document.getElementById('descriptionOfWork')?.value.trim() || 'Invoice';
-        
-        if (customerPhone) { 
-          status.textContent = 'Sending invoice to WhatsApp...';
-          await uploadPdfToWhatsApp(blob, filename, customerPhone, descriptionOfWork);
-          status.textContent = 'Invoice sent to WhatsApp (if number is valid).';
+
+        if (!customerPhone) {
+          status.textContent = 'Enter customer phone number to send on WhatsApp.';
+          status.classList.add('error');
+          return;
         }
-        
-        // Download the PDF
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
+
+        status.textContent = 'Sending invoice to WhatsApp...';
+        const ok = await uploadPdfToWhatsApp(blob, filename, customerPhone, descriptionOfWork);
+        if (ok) {
+          status.textContent = 'Invoice sent to WhatsApp (if number is valid).';
+          status.classList.remove('error');
+        } else {
+          status.textContent = 'Failed to send invoice to WhatsApp.';
+          status.classList.add('error');
+        }
       }catch(err){
         status.textContent = `Download failed: ${err.message || err}`;
         status.classList.add('error');
@@ -703,7 +740,7 @@
 
             <div class="actions">
               <button type="submit">Create Invoice</button>
-              <button type="button" class="secondary" id="downloadBtn" onclick="downloadInvoicePdf()" disabled>Download PDF</button>
+              <button type="button" class="secondary" id="downloadBtn" onclick="downloadInvoicePdf()" disabled>Send to WhatsApp</button>
             </div>
             <div id="status" class="status"></div>
           </form>
