@@ -1362,6 +1362,7 @@ renderGallery();
 setYear();
 handleFormSubmit();
 enhanceServiceCards();
+handleServiceModal();
 handleStyleTabs();
 handleFaq();
 handleKitchenCarousel();
