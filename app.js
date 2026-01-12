@@ -302,6 +302,79 @@ const styleConcepts = {
   }
 };
 
+const serviceDetails = {
+  kitchen: {
+    title: 'Modular Kitchen Design',
+    body: 'End-to-end modular kitchens with smart storage, easy-clean finishes, and lighting planned from day one. Ideal if you cook daily or love to host.',
+    icon: '🍽️'
+  },
+  wardrobe: {
+    title: 'Wardrobes & Storage Walls',
+    body: 'Built-in and freestanding wardrobes planned to the inch for clothes, luggage, and everyday clutter so your rooms always feel calm.',
+    icon: '👚'
+  },
+  crockery: {
+    title: 'Crockery & Display Units',
+    body: 'Crockery, bar and display units that show off your favourites while hiding the rest, with lighting and wiring already planned.',
+    icon: '🥂'
+  },
+  'space-saving': {
+    title: 'Space-Saving Furniture',
+    body: 'Fold-out beds, study nooks, benches with storage and more — perfect for compact flats and kids rooms that need to do it all.',
+    icon: '🧩'
+  },
+  'tv-units': {
+    title: 'TV & Media Units',
+    body: 'Wall-mounted TV units with concealed wiring, sound-friendly panelling and display niches for a clean, hotel-like look.',
+    icon: '📺'
+  },
+  'study-tables': {
+    title: 'Study Tables & Work Corners',
+    body: 'Dedicated work and study corners with ergonomic heights, cable management and pin-up space so the rest of the room stays tidy.',
+    icon: '📚'
+  },
+  'false-ceiling': {
+    title: 'False Ceiling & Lighting Grid',
+    body: 'False ceilings with a full lighting plan — ambient, task and accent — so you never have to retrofit lights after moving in.',
+    icon: '💡'
+  },
+  lights: {
+    title: 'Layered Lighting Design',
+    body: 'From statement chandeliers to soft cove lighting, we layer lights to flatter your space and make evenings feel warm and relaxed.',
+    icon: '✨'
+  },
+  wallpaper: {
+    title: 'Wallpaper & Feature Walls',
+    body: 'Accent walls, textures and prints chosen to match your furniture and flooring — not fight with them.',
+    icon: '🖼️'
+  },
+  'wall-paint': {
+    title: 'Wall Paint & Finishes',
+    body: 'Shade cards, finish selection and paint execution so your walls feel rich, durable and easy to maintain.',
+    icon: '🎨'
+  },
+  bathroom: {
+    title: 'Bathroom Makeovers',
+    body: 'Vanities, storage, tiles and fittings planned together so small bathrooms feel spa-like and clutter-free.',
+    icon: '🚿'
+  },
+  pooja: {
+    title: 'Pooja Units & Niches',
+    body: 'Compact and full-height pooja units with thoughtful lighting, storage for essentials and finishes that are easy to maintain.',
+    icon: '🪔'
+  },
+  foyer: {
+    title: 'Foyer & Entry Design',
+    body: 'Consoles, shoe cabinets and mirrors that create a welcoming first impression the moment you open the door.',
+    icon: '🚪'
+  },
+  movable: {
+    title: 'Movable Furniture Curation',
+    body: 'Sofas, chairs and tables curated to match your fixed interiors, so everything feels like one complete story.',
+    icon: '🛋️'
+  }
+};
+
 const galleryGrid = document.getElementById('galleryGrid');
 const contactForm = document.getElementById('contactForm');
 const toast = document.getElementById('toast');
@@ -343,6 +416,11 @@ const heroSliders = document.querySelectorAll('[data-hero-slider]');
 const leadPopup = document.getElementById('leadPopup');
 const leadPopupClose = document.getElementById('leadPopupClose');
 const leadPopupForm = document.getElementById('leadPopupForm');
+const serviceModal = document.getElementById('serviceModal');
+const serviceModalClose = document.getElementById('serviceModalClose');
+const serviceModalTitle = document.getElementById('serviceModalTitle');
+const serviceModalBody = document.getElementById('serviceModalBody');
+const serviceModalIcon = document.getElementById('serviceModalIcon');
 
 const renderGallery = () => {
   if (!galleryGrid) return;
@@ -498,6 +576,61 @@ const enhanceServiceCards = () => {
   cards.forEach(card => {
     card.addEventListener('mouseenter', () => card.classList.add('active'));
     card.addEventListener('mouseleave', () => card.classList.remove('active'));
+  });
+};
+
+const handleServiceModal = () => {
+  if (!serviceModal || !serviceModalTitle || !serviceModalBody || !serviceModalIcon) return;
+
+  const cards = document.querySelectorAll('[data-service]');
+  if (!cards.length) return;
+
+  const openModalForKey = key => {
+    const detail = serviceDetails[key];
+    if (!detail) return;
+
+    serviceModalTitle.textContent = detail.title;
+    serviceModalBody.textContent = detail.body;
+    serviceModalIcon.textContent = detail.icon;
+
+    serviceModal.classList.add('is-open');
+    serviceModal.setAttribute('aria-hidden', 'false');
+  };
+
+  const closeModal = () => {
+    serviceModal.classList.remove('is-open');
+    serviceModal.setAttribute('aria-hidden', 'true');
+  };
+
+  cards.forEach(card => {
+    const key = card.getAttribute('data-service');
+    if (!key) return;
+
+    const trigger = () => openModalForKey(key);
+
+    card.addEventListener('click', trigger);
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        trigger();
+      }
+    });
+  });
+
+  serviceModalClose?.addEventListener('click', () => {
+    closeModal();
+  });
+
+  serviceModal.addEventListener('click', event => {
+    if (event.target === serviceModal || event.target.classList.contains('service-modal-backdrop')) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && serviceModal.classList.contains('is-open')) {
+      closeModal();
+    }
   });
 };
 
@@ -1240,4 +1373,3 @@ initHeroTypedWord();
 handleHappyCarousel();
 initHeroSliders();
 initLeadPopup();
-
