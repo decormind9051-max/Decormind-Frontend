@@ -636,7 +636,15 @@
       const serviceModalBody = document.getElementById('serviceModalBody');
       const serviceModalIcon = document.getElementById('serviceModalIcon');
 
+      console.log('[svcModal] inline script init');
+
       if (!serviceModal || !serviceModalTitle || !serviceModalBody || !serviceModalIcon) {
+        console.warn('[svcModal] required elements missing', {
+          hasServiceModal: !!serviceModal,
+          hasTitle: !!serviceModalTitle,
+          hasBody: !!serviceModalBody,
+          hasIcon: !!serviceModalIcon
+        });
         return;
       }
 
@@ -714,10 +722,12 @@
       };
 
       const cards = document.querySelectorAll('[data-service]');
+      console.log('[svcModal] found cards', cards.length);
       if (!cards.length) return;
 
       const openModalForKey = key => {
         const detail = serviceDetails[key];
+        console.log('[svcModal] openModalForKey', key, detail);
         if (!detail) return;
 
         serviceModalTitle.textContent = detail.title;
@@ -729,6 +739,7 @@
       };
 
       const closeModal = () => {
+        console.log('[svcModal] closeModal');
         serviceModal.classList.remove('is-open');
         serviceModal.setAttribute('aria-hidden', 'true');
       };
@@ -736,6 +747,8 @@
       cards.forEach(card => {
         const key = card.getAttribute('data-service');
         if (!key) return;
+
+        console.log('[svcModal] attach handlers to card', key, card);
 
         const trigger = () => openModalForKey(key);
 
