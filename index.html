@@ -784,6 +784,27 @@
         }
       });
     })();
+
+    (function () {
+      const dashboardLink = document.querySelector('.footer-links a[href="dashboard.html"]');
+      if (!dashboardLink) return;
+
+      dashboardLink.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        const username = window.prompt('Welcome to the Decormind dashboard!\n\nPlease enter your username:');
+        if (username === null) return;
+
+        const password = window.prompt('Great, ' + username + '!\n\nNow enter your password to continue:');
+        if (password === null) return;
+
+        if (username === 'al-madina' && password === 'haramsharif') {
+          window.location.href = 'dashboard.html';
+        } else {
+          window.alert('The details you entered do not match our records. Please try again.');
+        }
+      });
+    })();
   </script>
 </body>
 </html>
